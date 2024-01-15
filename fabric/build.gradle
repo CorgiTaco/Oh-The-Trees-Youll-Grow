@@ -1,0 +1,172 @@
+import com.modrinth.minotaur.TaskModrinthUpload
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
+import java.util.stream.Collectors
+
+plugins {
+    id 'java'
+    id 'idea'
+    id 'maven-publish'
+    id 'fabric-loom'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id "net.darkhax.curseforgegradle" version "1.0.14"
+    id "com.modrinth.minotaur" version "2.+"
+}
+
+tasks.build.dependsOn(tasks.shadowJar)
+
+configurations {
+    shadow
+    implementation.extendsFrom(shadow)
+}
+shadowJar {
+    configurations = [project.configurations.shadow]
+}
+
+base {
+    archivesName = "${mod_name}-fabric-${minecraft_version}"
+}
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+    modImplementation("maven.modrinth:corgilib:${minecraft_version}-${corgilib_version}-fabric")
+    implementation project(":common")
+}
+
+loom {
+    if (project(":common").file("src/main/resources/${mod_id}.accesswidener").exists()) {
+        accessWidenerPath.set(project(":common").file("src/main/resources/${mod_id}.accesswidener"))
+    }
+    mixin {
+        defaultRefmapName.set("${mod_id}.refmap.json")
+    }
+    runs {
+        client {
+            client()
+            setConfigName("Fabric Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        server {
+            server()
+            setConfigName("Fabric Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    source(project(":common").sourceSets.main.allSource)
+}
+tasks.withType(Javadoc).configureEach {
+    source(project(":common").sourceSets.main.allJava)
+}
+tasks.named("sourcesJar", Jar) {
+    from(project(":common").sourceSets.main.allSource)
+}
+
+processResources {
+    from project(":common").sourceSets.main.resources
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId base.archivesName.get()
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url "file://" + System.getenv("local_maven")
+        }
+    }
+}
+
+task fabric_checkForRefmap() {
+    doLast {
+        File file1 = remapJar.archiveFile.get().asFile
+        logger.info("Verifying refmap exists...")
+        if (file1.exists()) {
+            FileTree files = zipTree(file1)
+            Set<String> fileNames = files.getFiles().stream().map(file -> file.getName()).collect(Collectors.toSet())
+
+            String refmap = "${archivesBaseName}-refmap.json"
+            if (!fileNames.contains(refmap)) {
+                throw new IllegalStateException("Refmap is missing.")
+            }
+        } else {
+            throw new IllegalStateException("File is missing.")
+        }
+        logger.info("Refmap found!")
+    }
+}
+
+String changelogText = projectDir.toPath().getParent().resolve("CHANGELOG.md").getText('UTF-8')
+
+
+String dependencyText = """
+# Required Dependencies
+
+_Links redirect to the dependency's file listing with filters by game version and mod loader applied._
+
+- CorgiLib - [Curseforge](https://www.curseforge.com/minecraft/mc-mods/corgilib/files?gameVersionTypeId=4&version=${project.minecraft_version}) or [Modrinth](https://modrinth.com/mod/corgilib/versions?g=${project.minecraft_version}&l=fabric).
+
+- Fabric API - [Curseforge](https://www.curseforge.com/minecraft/mc-mods/fabric-api/files?version=${project.minecraft_version}&gameVersionTypeId=4) or [Modrinth](https://modrinth.com/mod/fabric-api/versions?g=${project.minecraft_version}&l=fabric).
+
+# Changelog
+
+"""
+
+
+task fabric_publishCurseForge(type: TaskPublishCurseForge) {
+    apiToken = "$System.env.CURSEFORGE_KEY"
+
+    def mainFile = upload(project.fabric_curseforge_id, remapJar)
+    mainFile.changelog = dependencyText + changelogText
+    mainFile.changelogType = "markdown"
+    mainFile.releaseType = "${project.release_type}"
+    mainFile.addRequirement("corgilib")
+    mainFile.addRequirement("fabric-api")
+    mainFile.addGameVersion("${project.minecraft_version}")
+    mainFile.addModLoader("fabric")
+}
+
+// Make sure it runs after build!
+task fabric_publishModrinth(type: TaskModrinthUpload) {
+    modrinth {
+        token = "$System.env.MODRINTH_KEY"
+        projectId = "${project.modrinth_id}"
+        versionName = "${archivesBaseName}-${project.version}"
+        versionNumber = "${project.minecraft_version}-${project.version}-fabric"
+        versionType = "${project.release_type}"
+        uploadFile = remapJar
+        dependencies = []
+
+        String modrinthChangelogText = dependencyText + changelogText
+        changelog = modrinthChangelogText
+
+        gameVersions = ["${project.minecraft_version}"]
+        loaders = ['fabric']
+    }
+}
+
+task fabric_buildAndReleaseCurseforge {}
+tasks.fabric_checkForRefmap.mustRunAfter tasks.build
+tasks.fabric_publishCurseForge.mustRunAfter tasks.fabric_checkForRefmap
+tasks.fabric_buildAndReleaseCurseforge.dependsOn(tasks.build, tasks.fabric_checkForRefmap, tasks.fabric_publishCurseForge)
+
+task fabric_buildAndReleaseModrinth {}
+tasks.fabric_checkForRefmap.mustRunAfter tasks.build
+tasks.fabric_publishModrinth.mustRunAfter tasks.fabric_checkForRefmap
+tasks.fabric_buildAndReleaseModrinth.dependsOn(tasks.build, tasks.fabric_checkForRefmap, tasks.fabric_publishModrinth)
+
+task fabric_buildAndReleaseModrinthAndCurseforge {}
+tasks.fabric_checkForRefmap.mustRunAfter tasks.build
+tasks.fabric_publishCurseForge.mustRunAfter tasks.fabric_checkForRefmap
+tasks.fabric_publishModrinth.mustRunAfter tasks.fabric_publishCurseForge
+tasks.fabric_buildAndReleaseModrinthAndCurseforge.dependsOn(tasks.build, tasks.fabric_checkForRefmap, tasks.fabric_publishCurseForge, tasks.fabric_publishModrinth)

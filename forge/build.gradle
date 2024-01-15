@@ -1,0 +1,247 @@
+import com.modrinth.minotaur.TaskModrinthUpload
+import com.modrinth.minotaur.dependencies.DependencyType
+import com.modrinth.minotaur.dependencies.ModDependency
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+import java.util.stream.Collectors
+
+plugins {
+    id 'idea'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle'
+    id 'org.spongepowered.mixin'
+
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id "net.darkhax.curseforgegradle" version "1.0.14"
+    id "com.modrinth.minotaur" version "2.+"
+}
+base {
+    archivesName = "${mod_name}-forge-${minecraft_version}"
+}
+mixin {
+    add(sourceSets.main, "${mod_id}.refmap.json")
+
+    config("${mod_id}.mixins.json")
+    config("${mod_id}.forge.mixins.json")
+}
+
+tasks.build.dependsOn(tasks.shadowJar)
+
+configurations {
+    shadow
+    implementation.extendsFrom shadow
+
+    library
+    implementation.extendsFrom library
+
+    dataImplementation.extendsFrom implementation
+    dataCompileOnly.extendsFrom compileOnly
+}
+
+sourceSets {
+    data
+}
+
+minecraft.runs.configureEach {
+    lazyToken('minecraft_classpath') {
+        configurations.library.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
+    }
+}
+
+archivesBaseName = "${mod_name}-forge-${minecraft_version}"
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+    archiveClassifier.set('')
+}
+reobf {
+    shadowJar {
+    }
+}
+
+minecraft {
+    mappings channel: 'official', version: minecraft_version
+
+    // Automatically enable forge AccessTransformers if the file exists
+    // This location is hardcoded in Forge and can not be changed.
+    // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
+    if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
+        accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    }
+
+    runs {
+        def runArgs = []
+        client {
+            workingDirectory project.file('run')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            taskName 'Client'
+            def output = sourceSets.main.output
+            def commonOutput = project(":common").sourceSets.main.output
+            environment("MOD_CLASSES", [output.classesDirs.asPath, sourceSets.data.output.asPath, output.resourcesDir.path, commonOutput.classesDirs.asPath, commonOutput.resourcesDir.path].join(";"))
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            mods {
+                modClientRun {
+                    source sourceSets.main
+                    source project(":common").sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            taskName 'Server'
+            def output = sourceSets.main.output
+            def commonOutput = project(":common").sourceSets.main.output
+            environment("MOD_CLASSES", [output.classesDirs.asPath, sourceSets.data.output.asPath, output.resourcesDir.path, commonOutput.classesDirs.asPath, commonOutput.resourcesDir.path].join(";"))
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            mods {
+                modServerRun {
+                    source sourceSets.main
+                    source project(":common").sourceSets.main
+                }
+            }
+        }
+
+        data {
+            jvmArgs runArgs
+            workingDirectory project.file('run')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            args '--mod', mod_id, '--all', '--output', project(':common').file('src/generated/resources'), '--existing', project(':common').file('src/main/resources'), "-mixin.config=${mod_id}.mixins.json", "-mixin.config=${mod_id}.forge.mixins.json"
+            taskName 'Data'
+            def output = sourceSets.main.output
+            def commonOutput = project(":common").sourceSets.main.output
+            environment("MOD_CLASSES", [output.classesDirs.asPath, sourceSets.data.output.asPath, output.resourcesDir.path, commonOutput.classesDirs.asPath, commonOutput.resourcesDir.path].join(";"))
+
+            mods {
+                examplemod {
+                    source sourceSets.main as SourceSet
+                    source sourceSets.data as SourceSet
+                    source project(":common").sourceSets.main as SourceSet
+                }
+            }
+        }
+    }
+}
+
+sourceSets.main.resources.srcDir 'src/generated/resources'
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    compileOnly project(":common")
+    annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
+    implementation fg.deobf("maven.modrinth:corgilib:${minecraft_version}-${corgilib_version}-forge")
+}
+
+tasks.withType(JavaCompile).configureEach {
+    source(project(":common").sourceSets.main.allSource)
+}
+tasks.withType(Javadoc).configureEach {
+    source(project(":common").sourceSets.main.allJava)
+}
+tasks.named("sourcesJar", Jar) {
+    from(project(":common").sourceSets.main.allSource)
+}
+
+processResources {
+    from project(":common").sourceSets.main.resources
+}
+
+jar.finalizedBy('reobfJar')
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId base.archivesName.get()
+            from components.java
+            fg.component(it)
+        }
+    }
+    repositories {
+        maven {
+            url "file://" + System.getenv("local_maven")
+        }
+    }
+}
+
+task forge_checkForRefmap() {
+    doLast {
+        File file1 = shadowJar.archiveFile.get().asFile
+        logger.info("Verifying refmap exists...")
+        if (file1.exists()) {
+            FileTree files = zipTree(file1)
+            Set<String> fileNames = files.getFiles().stream().map(file -> file.getName()).collect(Collectors.toSet())
+
+            String forgeRefmap = "${mod_id}.forge.refmap.json"
+            String commonRefmap = "${mod_id}.refmap.json"
+            if (!fileNames.contains(forgeRefmap) || !fileNames.contains(commonRefmap)) {
+                throw new IllegalStateException("Refmap is missing.")
+            }
+        } else {
+            throw new IllegalStateException("File is missing.")
+        }
+        logger.info("Refmap found!")
+    }
+}
+
+String changelogText = projectDir.toPath().getParent().resolve("CHANGELOG.md").getText('UTF-8')
+
+
+String dependencyText = """
+# Required Dependencies
+
+_Links redirect to the dependency's file listing with filters by game version and mod loader applied._
+- CorgiLib - [Curseforge](https://www.curseforge.com/minecraft/mc-mods/corgilib/files?gameVersionTypeId=1&version=${project.minecraft_version}) or [Modrinth](https://modrinth.com/mod/corgilib/versions?g=${project.minecraft_version}&l=forge) .
+
+# Changelog
+
+"""
+
+
+
+task forge_publishCurseForge(type: TaskPublishCurseForge) {
+    apiToken = "$System.env.CURSEFORGE_KEY"
+
+    def mainFile = upload(project.forge_curseforge_id, shadowJar)
+    mainFile.changelog = dependencyText + changelogText
+    mainFile.changelogType = "markdown"
+    mainFile.releaseType = "${project.release_type}"
+    mainFile.addRequirement("corgilib")
+    mainFile.addGameVersion("${project.minecraft_version}")
+    mainFile.addModLoader("forge")
+}
+
+task forge_publishModrinth (type: TaskModrinthUpload) {
+    modrinth {
+        token = "$System.env.MODRINTH_KEY"
+        projectId = "${project.modrinth_id}"
+        versionName = "${archivesBaseName}-${project.version}"
+        versionNumber = "${project.minecraft_version}-${project.version}-forge"
+        versionType = "${project.release_type}"
+        uploadFile = shadowJar
+        dependencies = []
+
+        String modrinthChangelogText = dependencyText + changelogText
+        changelog = modrinthChangelogText
+
+        gameVersions = ["${project.minecraft_version}"]
+        loaders = ['forge']
+    }
+}
+
+task forge_buildAndReleaseCurseforge {}
+tasks.forge_checkForRefmap.mustRunAfter tasks.build
+tasks.forge_publishCurseForge.mustRunAfter tasks.forge_checkForRefmap
+tasks.forge_buildAndReleaseCurseforge.dependsOn(tasks.build, tasks.forge_checkForRefmap, tasks.forge_publishCurseForge)
+
+task forge_buildAndReleaseModrinth {}
+tasks.forge_checkForRefmap.mustRunAfter tasks.build
+tasks.forge_publishModrinth.mustRunAfter tasks.forge_checkForRefmap
+tasks.forge_buildAndReleaseModrinth.dependsOn(tasks.build, tasks.forge_checkForRefmap, tasks.forge_publishModrinth)
+
+task forge_buildAndReleaseModrinthAndCurseforge {}
+tasks.forge_checkForRefmap.mustRunAfter tasks.build
+tasks.forge_publishCurseForge.mustRunAfter tasks.forge_checkForRefmap
+tasks.forge_publishModrinth.mustRunAfter tasks.forge_publishCurseForge
+tasks.forge_buildAndReleaseModrinthAndCurseforge.dependsOn(tasks.build, tasks.forge_checkForRefmap, tasks.forge_publishCurseForge, tasks.forge_publishModrinth)
