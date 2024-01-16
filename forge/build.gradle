@@ -60,7 +60,7 @@ reobf {
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
-
+    copyIdeResources = true
     // Automatically enable forge AccessTransformers if the file exists
     // This location is hardcoded in Forge and can not be changed.
     // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
@@ -115,7 +115,7 @@ minecraft {
             environment("MOD_CLASSES", [output.classesDirs.asPath, sourceSets.data.output.asPath, output.resourcesDir.path, commonOutput.classesDirs.asPath, commonOutput.resourcesDir.path].join(";"))
 
             mods {
-                examplemod {
+                ohthetreesyoullgrow {
                     source sourceSets.main as SourceSet
                     source sourceSets.data as SourceSet
                     source project(":common").sourceSets.main as SourceSet
@@ -125,14 +125,16 @@ minecraft {
     }
 }
 
-sourceSets.main.resources.srcDir 'src/generated/resources'
+sourceSets.main.resources.srcDir project(":common").file('src/generated/resources')
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":common")
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
-    implementation fg.deobf("maven.modrinth:corgilib:${minecraft_version}-${corgilib_version}-forge")
+    dataImplementation sourceSets.main.output
 }
+
+reg.configureJarTask(shadowJar)
 
 tasks.withType(JavaCompile).configureEach {
     source(project(":common").sourceSets.main.allSource)
@@ -146,9 +148,37 @@ tasks.named("sourcesJar", Jar) {
 
 processResources {
     from project(":common").sourceSets.main.resources
+
+    exclude '.cache/**'
+
+    exclude('data/c/tags/**')
+    exclude('data/fabric/tags/**')
+
+// This block of code expands all declared replace properties in the specified resource targets.
+// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
+// When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
+// See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
+    def resourceTargets = ['META-INF/mods.toml']
+    def replaceProperties = [
+            minecraft_version: minecraft_version,
+            forge_version: forge_version,
+            version: version,
+            mod_name: mod_name,
+            mod_author: mod_author
+    ]
+
+    inputs.properties replaceProperties
+    replaceProperties.put 'project', project
+
+    filesMatching(resourceTargets) {
+        expand replaceProperties
+    }
 }
 
-jar.finalizedBy('reobfJar')
+jar {
+    finalizedBy('reobfJar')
+    archiveClassifier.set('slim')
+}
 
 publishing {
     publications {
@@ -175,7 +205,7 @@ task forge_checkForRefmap() {
 
             String forgeRefmap = "${mod_id}.forge.refmap.json"
             String commonRefmap = "${mod_id}.refmap.json"
-            if (!fileNames.contains(forgeRefmap) || !fileNames.contains(commonRefmap)) {
+            if (/*!fileNames.contains(forgeRefmap) ||*/ !fileNames.contains(commonRefmap)) {
                 throw new IllegalStateException("Refmap is missing.")
             }
         } else {
@@ -189,11 +219,6 @@ String changelogText = projectDir.toPath().getParent().resolve("CHANGELOG.md").g
 
 
 String dependencyText = """
-# Required Dependencies
-
-_Links redirect to the dependency's file listing with filters by game version and mod loader applied._
-- CorgiLib - [Curseforge](https://www.curseforge.com/minecraft/mc-mods/corgilib/files?gameVersionTypeId=1&version=${project.minecraft_version}) or [Modrinth](https://modrinth.com/mod/corgilib/versions?g=${project.minecraft_version}&l=forge) .
-
 # Changelog
 
 """
@@ -207,7 +232,6 @@ task forge_publishCurseForge(type: TaskPublishCurseForge) {
     mainFile.changelog = dependencyText + changelogText
     mainFile.changelogType = "markdown"
     mainFile.releaseType = "${project.release_type}"
-    mainFile.addRequirement("corgilib")
     mainFile.addGameVersion("${project.minecraft_version}")
     mainFile.addModLoader("forge")
 }

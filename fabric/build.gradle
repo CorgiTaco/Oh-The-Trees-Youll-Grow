@@ -26,15 +26,20 @@ shadowJar {
 base {
     archivesName = "${mod_name}-fabric-${minecraft_version}"
 }
+
+sourceSets.main.resources.srcDir project(":common").file('src/generated/resources')
+
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-    modImplementation("maven.modrinth:corgilib:${minecraft_version}-${corgilib_version}-fabric")
     implementation project(":common")
 }
+
+reg.configureJarTask(shadowJar)
+
 
 loom {
     if (project(":common").file("src/main/resources/${mod_id}.accesswidener").exists()) {
@@ -95,7 +100,7 @@ task fabric_checkForRefmap() {
             FileTree files = zipTree(file1)
             Set<String> fileNames = files.getFiles().stream().map(file -> file.getName()).collect(Collectors.toSet())
 
-            String refmap = "${archivesBaseName}-refmap.json"
+            String refmap = "${mod_id}.refmap.json"
             if (!fileNames.contains(refmap)) {
                 throw new IllegalStateException("Refmap is missing.")
             }
@@ -110,14 +115,6 @@ String changelogText = projectDir.toPath().getParent().resolve("CHANGELOG.md").g
 
 
 String dependencyText = """
-# Required Dependencies
-
-_Links redirect to the dependency's file listing with filters by game version and mod loader applied._
-
-- CorgiLib - [Curseforge](https://www.curseforge.com/minecraft/mc-mods/corgilib/files?gameVersionTypeId=4&version=${project.minecraft_version}) or [Modrinth](https://modrinth.com/mod/corgilib/versions?g=${project.minecraft_version}&l=fabric).
-
-- Fabric API - [Curseforge](https://www.curseforge.com/minecraft/mc-mods/fabric-api/files?version=${project.minecraft_version}&gameVersionTypeId=4) or [Modrinth](https://modrinth.com/mod/fabric-api/versions?g=${project.minecraft_version}&l=fabric).
-
 # Changelog
 
 """
@@ -130,7 +127,6 @@ task fabric_publishCurseForge(type: TaskPublishCurseForge) {
     mainFile.changelog = dependencyText + changelogText
     mainFile.changelogType = "markdown"
     mainFile.releaseType = "${project.release_type}"
-    mainFile.addRequirement("corgilib")
     mainFile.addRequirement("fabric-api")
     mainFile.addGameVersion("${project.minecraft_version}")
     mainFile.addModLoader("fabric")
