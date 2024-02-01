@@ -28,44 +28,38 @@ import java.util.function.Supplier;
 public class TYGConfiguredFeatures {
     public static final Map<ResourceKey<ConfiguredFeature<?, ?>>, ConfiguredFeatureFactory> CONFIGURED_FEATURES_FACTORIES = new Reference2ObjectOpenHashMap<>();
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> V1_TEST_TREE1 = createConfiguredFeature("v1_test_tree_1", TYGFeatures.TREE_FROM_NBT_V1, configuredFeatureBootstapContext -> {
-        return new TreeFromStructureNBTConfig(
-                Constants.createLocation("features/trees/testv1/test_tree_trunk1"),
-                Constants.createLocation("features/trees/testv1/test_tree_canopy1"),
-                UniformInt.of(5, 10),
-                BlockStateProvider.simple(Blocks.ACACIA_LOG),
-                BlockStateProvider.simple(Blocks.ACACIA_LEAVES),
-                Blocks.OAK_LOG, Blocks.OAK_LEAVES, BlockTags.DIRT,
-                3,
-                List.of(new AlterGroundDecorator(SimpleStateProvider.simple(Blocks.MOSS_BLOCK)))
-                );
-    });
+    public static final ResourceKey<ConfiguredFeature<?, ?>> V1_TEST_TREE1 = createConfiguredFeature("v1_test_tree_1", TYGFeatures.TREE_FROM_NBT_V1, configuredFeatureBootstapContext -> new TreeFromStructureNBTConfig(
+            Constants.createLocation("features/trees/testv1/test_tree_trunk1"),
+            Constants.createLocation("features/trees/testv1/test_tree_canopy1"),
+            UniformInt.of(5, 10),
+            BlockStateProvider.simple(Blocks.ACACIA_LOG),
+            BlockStateProvider.simple(Blocks.ACACIA_LEAVES),
+            Blocks.OAK_LOG, Blocks.OAK_LEAVES, BlockTags.DIRT,
+            3,
+            List.of(new AlterGroundDecorator(SimpleStateProvider.simple(Blocks.MOSS_BLOCK)))
+            ));
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> V1_TEST_TREE2 = createConfiguredFeature("v1_test_tree_2", TYGFeatures.TREE_FROM_NBT_V1, configuredFeatureBootstapContext -> {
-        return new TreeFromStructureNBTConfig(
-                Constants.createLocation("features/trees/testv1/test_tree_trunk1"),
-                Constants.createLocation("features/trees/testv1/test_tree_canopy1"),
-                UniformInt.of(5, 10),
-                BlockStateProvider.simple(Blocks.JUNGLE_LOG),
-                BlockStateProvider.simple(Blocks.JUNGLE_LEAVES),
-                Blocks.OAK_LOG, Blocks.OAK_LEAVES, BlockTags.DIRT,
-                5,
-                List.of(new LeaveVineDecorator(0.5F), new BeehiveDecorator(0.2F))
-        );
-    });
+    public static final ResourceKey<ConfiguredFeature<?, ?>> V1_TEST_TREE2 = createConfiguredFeature("v1_test_tree_2", TYGFeatures.TREE_FROM_NBT_V1, configuredFeatureBootstapContext -> new TreeFromStructureNBTConfig(
+            Constants.createLocation("features/trees/testv1/test_tree_trunk1"),
+            Constants.createLocation("features/trees/testv1/test_tree_canopy1"),
+            UniformInt.of(5, 10),
+            BlockStateProvider.simple(Blocks.JUNGLE_LOG),
+            BlockStateProvider.simple(Blocks.JUNGLE_LEAVES),
+            Blocks.OAK_LOG, Blocks.OAK_LEAVES, BlockTags.DIRT,
+            5,
+            List.of(new LeaveVineDecorator(0.5F), new BeehiveDecorator(0.2F))
+    ));
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> V1_TEST_TREE3 = createConfiguredFeature("v1_test_tree_3", TYGFeatures.TREE_FROM_NBT_V1, configuredFeatureBootstapContext -> {
-        return new TreeFromStructureNBTConfig(
-                Constants.createLocation("features/trees/testv1/test_tree_trunk1"),
-                Constants.createLocation("features/trees/testv1/test_tree_canopy1"),
-                UniformInt.of(20, 25),
-                BlockStateProvider.simple(Blocks.DIAMOND_BLOCK),
-                BlockStateProvider.simple(Blocks.EMERALD_BLOCK),
-                Blocks.OAK_LOG, Blocks.OAK_LEAVES, BlockTags.DIRT,
-                3,
-                List.of()
-        );
-    });
+    public static final ResourceKey<ConfiguredFeature<?, ?>> V1_TEST_TREE3 = createConfiguredFeature("v1_test_tree_3", TYGFeatures.TREE_FROM_NBT_V1, configuredFeatureBootstapContext -> new TreeFromStructureNBTConfig(
+            Constants.createLocation("features/trees/testv1/test_tree_trunk1"),
+            Constants.createLocation("features/trees/testv1/test_tree_canopy1"),
+            UniformInt.of(20, 25),
+            BlockStateProvider.simple(Blocks.DIAMOND_BLOCK),
+            BlockStateProvider.simple(Blocks.EMERALD_BLOCK),
+            Blocks.OAK_LOG, Blocks.OAK_LEAVES, BlockTags.DIRT,
+            3,
+            List.of()
+    ));
 
 
     public static <FC extends FeatureConfiguration, F extends Feature<FC>> ResourceKey<ConfiguredFeature<?, ?>> createConfiguredFeature(String id, Supplier<? extends F> feature, Function<BootstapContext<ConfiguredFeature<?, ?>>, ? extends FC> config) {
