@@ -38,8 +38,6 @@ dependencies {
     implementation project(":common")
 }
 
-reg.configureJarTask(shadowJar)
-
 
 loom {
     if (project(":common").file("src/main/resources/${mod_id}.accesswidener").exists()) {

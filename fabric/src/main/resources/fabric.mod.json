@@ -7,6 +7,9 @@
     "authors": [
         "${mod_author}"
     ],
+    "contributors": [
+        "Joseph T. McQuigg (JT122406)"
+    ],
     "contact": {
         "homepage": "https://curseforge.com/minecraft/mc-mods/oh-the-trees-youll-grow",
         "sources": "https://github.com/CorgiTaco/Oh-The-Trees-Youll-Grow",

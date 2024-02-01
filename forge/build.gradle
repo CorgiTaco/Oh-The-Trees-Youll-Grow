@@ -134,8 +134,6 @@ dependencies {
     dataImplementation sourceSets.main.output
 }
 
-reg.configureJarTask(shadowJar)
-
 tasks.withType(JavaCompile).configureEach {
     source(project(":common").sourceSets.main.allSource)
 }

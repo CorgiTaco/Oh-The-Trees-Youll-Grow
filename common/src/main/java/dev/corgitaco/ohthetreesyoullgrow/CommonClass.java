@@ -7,7 +7,6 @@ import dev.corgitaco.ohthetreesyoullgrow.world.level.levelgen.feature.TYGFeature
 public class CommonClass {
 
     public static void init() {
-        TYGFeatures.register();
         TYGConfiguredFeatures.register();
         TYGPlacedFeatures.register();
     }

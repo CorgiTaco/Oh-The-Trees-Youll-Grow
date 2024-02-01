@@ -3,16 +3,6 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)' apply(false)
     id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT' apply(false)
     id("org.spongepowered.mixin") version "0.7-SNAPSHOT" apply(false)
-    id 'com.matyrobbrt.mc.registrationutils' version '1.20.1-1.0.1'
-}
-
-registrationUtils {
-    group 'corgitaco.ohthetreesyoullgrow.reg'
-    projects {
-        Common { type 'common'; project ':common' }
-        Fabric { type 'fabric'; project ':fabric' }
-        Forge { type 'forge'; project ':forge' }
-    }
 }
 
 subprojects {
