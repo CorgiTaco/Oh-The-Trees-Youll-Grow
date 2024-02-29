@@ -28,7 +28,7 @@ import java.util.function.Supplier;
 public class TYGConfiguredFeatures {
     public static final Map<ResourceKey<ConfiguredFeature<?, ?>>, ConfiguredFeatureFactory> CONFIGURED_FEATURES_FACTORIES = new Reference2ObjectOpenHashMap<>();
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> V1_TEST_TREE1 = createConfiguredFeature("v1_test_tree_1", TYGFeatures.TREE_FROM_NBT_V1, configuredFeatureBootstapContext -> new TreeFromStructureNBTConfig(
+    public static final ResourceKey<ConfiguredFeature<?, ?>> V1_TEST_TREE1 = createConfiguredFeature("v1_test_tree_1",  TYGFeatures.TREE_FROM_NBT_V1, configuredFeatureBootstapContext -> new TreeFromStructureNBTConfig(
             Constants.createLocation("features/trees/testv1/test_tree_trunk1"),
             Constants.createLocation("features/trees/testv1/test_tree_canopy1"),
             UniformInt.of(5, 10),

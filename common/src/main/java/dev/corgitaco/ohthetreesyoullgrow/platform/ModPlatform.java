@@ -1,5 +1,8 @@
 package dev.corgitaco.ohthetreesyoullgrow.platform;
 
+import com.mojang.serialization.Codec;
+import dev.corgitaco.ohthetreesyoullgrow.world.level.levelgen.feature.TreeFromStructureNBTFeature;
+import dev.corgitaco.ohthetreesyoullgrow.world.level.levelgen.feature.configurations.TreeFromStructureNBTConfig;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
@@ -12,6 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.MobBucketItem;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.material.Fluid;
 
 import java.nio.file.Path;
@@ -65,6 +69,8 @@ public interface ModPlatform {
     MobBucketItem createMobBucketItem(Supplier<? extends EntityType<?>> entitySupplier, Supplier<? extends Fluid> fluidSupplier, Supplier<? extends SoundEvent> soundSupplier, Item.Properties properties);
 
     CreativeModeTab creativeModeTab();
+
+    Supplier<Feature<TreeFromStructureNBTConfig>> registerTreeFromStructureNBTFeature(TreeFromStructureNBTFeature feature, String name);
 
     enum Platform {
         FORGE,

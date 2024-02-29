@@ -2,19 +2,25 @@ package dev.corgitaco.ohthetreesyoullgrow.platform;
 
 import com.google.auto.service.AutoService;
 import dev.corgitaco.ohthetreesyoullgrow.Constants;
+import dev.corgitaco.ohthetreesyoullgrow.world.level.levelgen.feature.TreeFromStructureNBTFeature;
+import dev.corgitaco.ohthetreesyoullgrow.world.level.levelgen.feature.configurations.TreeFromStructureNBTConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.material.Fluid;
 
 import java.nio.file.Path;
@@ -93,5 +99,11 @@ public class FabricModPlatform implements ModPlatform {
         return FabricItemGroup.builder().title(Component.translatable("itemGroup." + Constants.MOD_ID + "." + Constants.MOD_ID)).icon(() -> new ItemStack(Items.POPPY)).displayItems((displayParameters, pOutput) -> {
 
         }).build();
+    }
+
+    @Override
+    public Supplier<Feature<TreeFromStructureNBTConfig>> registerTreeFromStructureNBTFeature(TreeFromStructureNBTFeature feature, String name) {
+        Feature<TreeFromStructureNBTConfig> temp = Registry.register(BuiltInRegistries.FEATURE, new ResourceLocation(Constants.MOD_ID, name), feature);
+        return () -> temp;
     }
 }
