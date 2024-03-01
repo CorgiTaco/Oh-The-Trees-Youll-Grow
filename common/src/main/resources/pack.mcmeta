@@ -1,6 +1,6 @@
 {
     "pack": {
-        "description": "${mod_name}",
-        "pack_format": 8
+        "description": "Oh The Trees You'll Grow",
+        "pack_format": 15
     }
 }
