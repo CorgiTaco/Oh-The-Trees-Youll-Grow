@@ -107,14 +107,12 @@ public class ForgeModPlatform implements ModPlatform {
         return builder.build();
     }
 
-    private static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registries.FEATURE, Constants.MOD_ID);
-
     @Override
     public Supplier<Feature<TreeFromStructureNBTConfig>> registerTreeFromStructureNBTFeature(TreeFromStructureNBTFeature feature, String name) {
-        return FEATURES.register(name, () -> feature);
+        DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registries.FEATURE, Constants.MOD_ID);
+        Supplier<Feature<TreeFromStructureNBTConfig>> hold = FEATURES.register(name, () -> feature);
+        FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        return hold;
     }
 
-    public static void registerFeatures() {
-        FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());
-    }
 }

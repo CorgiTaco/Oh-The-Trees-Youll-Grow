@@ -1,6 +1,5 @@
 package dev.corgitaco.ohthetreesyoullgrow.platform;
 
-import com.mojang.serialization.Codec;
 import dev.corgitaco.ohthetreesyoullgrow.world.level.levelgen.feature.TreeFromStructureNBTFeature;
 import dev.corgitaco.ohthetreesyoullgrow.world.level.levelgen.feature.configurations.TreeFromStructureNBTConfig;
 import net.minecraft.Util;
