@@ -68,7 +68,7 @@ public interface ModPlatform {
 
     CreativeModeTab creativeModeTab();
 
-    < FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerTreeFromStructureNBTFeature(T feature, String name);
+    <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerTreeFromStructureNBTFeature(Supplier<T> feature, String name);
 
     enum Platform {
         FORGE,

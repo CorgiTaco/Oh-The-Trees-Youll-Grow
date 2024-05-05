@@ -101,8 +101,8 @@ public class FabricModPlatform implements ModPlatform {
     }
 
     @Override
-    public <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerTreeFromStructureNBTFeature(T feature, String name) {
-        T temp = Registry.register(BuiltInRegistries.FEATURE, new ResourceLocation(Constants.MOD_ID, name), feature);
+    public <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerTreeFromStructureNBTFeature(Supplier<T> feature, String name) {
+        T temp = Registry.register(BuiltInRegistries.FEATURE, new ResourceLocation(Constants.MOD_ID, name), feature.get());
         return () -> temp;
     }
 

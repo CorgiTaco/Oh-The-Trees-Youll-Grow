@@ -107,9 +107,9 @@ public class ForgeModPlatform implements ModPlatform {
     }
 
     @Override
-    public <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerTreeFromStructureNBTFeature(T feature, String name) {
+    public <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerTreeFromStructureNBTFeature(Supplier<T> feature, String name) {
         DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registries.FEATURE, Constants.MOD_ID);
-        Supplier<T> hold = FEATURES.register(name, () -> feature);
+        Supplier<T> hold = FEATURES.register(name, feature);
         FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());
         return hold;
     }
