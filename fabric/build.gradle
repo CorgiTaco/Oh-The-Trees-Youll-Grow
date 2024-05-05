@@ -1,8 +1,6 @@
 import com.modrinth.minotaur.TaskModrinthUpload
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
-import java.util.stream.Collectors
-
 plugins {
     id 'java'
     id 'idea'
@@ -43,9 +41,8 @@ loom {
     if (project(":common").file("src/main/resources/${mod_id}.accesswidener").exists()) {
         accessWidenerPath.set(project(":common").file("src/main/resources/${mod_id}.accesswidener"))
     }
-    mixin {
-        defaultRefmapName.set("${mod_id}.refmap.json")
-    }
+    mixin.useLegacyMixinAp.set(false)
+
     runs {
         client {
             client()
@@ -90,25 +87,6 @@ publishing {
     }
 }
 
-task fabric_checkForRefmap() {
-    doLast {
-        File file1 = remapJar.archiveFile.get().asFile
-        logger.info("Verifying refmap exists...")
-        if (file1.exists()) {
-            FileTree files = zipTree(file1)
-            Set<String> fileNames = files.getFiles().stream().map(file -> file.getName()).collect(Collectors.toSet())
-
-            String refmap = "${mod_id}.refmap.json"
-            if (!fileNames.contains(refmap)) {
-                throw new IllegalStateException("Refmap is missing.")
-            }
-        } else {
-            throw new IllegalStateException("File is missing.")
-        }
-        logger.info("Refmap found!")
-    }
-}
-
 String changelogText = projectDir.toPath().getParent().resolve("CHANGELOG.md").getText('UTF-8')
 
 
@@ -150,17 +128,14 @@ task fabric_publishModrinth(type: TaskModrinthUpload) {
 }
 
 task fabric_buildAndReleaseCurseforge {}
-tasks.fabric_checkForRefmap.mustRunAfter tasks.build
-tasks.fabric_publishCurseForge.mustRunAfter tasks.fabric_checkForRefmap
-tasks.fabric_buildAndReleaseCurseforge.dependsOn(tasks.build, tasks.fabric_checkForRefmap, tasks.fabric_publishCurseForge)
+tasks.fabric_publishCurseForge.mustRunAfter tasks.build
+tasks.fabric_buildAndReleaseCurseforge.dependsOn(tasks.build, tasks.fabric_publishCurseForge)
 
 task fabric_buildAndReleaseModrinth {}
-tasks.fabric_checkForRefmap.mustRunAfter tasks.build
-tasks.fabric_publishModrinth.mustRunAfter tasks.fabric_checkForRefmap
-tasks.fabric_buildAndReleaseModrinth.dependsOn(tasks.build, tasks.fabric_checkForRefmap, tasks.fabric_publishModrinth)
+tasks.fabric_publishModrinth.mustRunAfter tasks.build
+tasks.fabric_buildAndReleaseModrinth.dependsOn(tasks.build, tasks.fabric_publishModrinth)
 
 task fabric_buildAndReleaseModrinthAndCurseforge {}
-tasks.fabric_checkForRefmap.mustRunAfter tasks.build
-tasks.fabric_publishCurseForge.mustRunAfter tasks.fabric_checkForRefmap
+tasks.fabric_publishCurseForge.mustRunAfter tasks.build
 tasks.fabric_publishModrinth.mustRunAfter tasks.fabric_publishCurseForge
-tasks.fabric_buildAndReleaseModrinthAndCurseforge.dependsOn(tasks.build, tasks.fabric_checkForRefmap, tasks.fabric_publishCurseForge, tasks.fabric_publishModrinth)
+tasks.fabric_buildAndReleaseModrinthAndCurseforge.dependsOn(tasks.build, tasks.fabric_publishCurseForge, tasks.fabric_publishModrinth)
