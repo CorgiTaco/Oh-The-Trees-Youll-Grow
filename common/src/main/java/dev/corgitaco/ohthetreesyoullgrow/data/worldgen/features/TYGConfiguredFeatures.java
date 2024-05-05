@@ -38,7 +38,7 @@ public class TYGConfiguredFeatures {
                 Blocks.OAK_LOG, Blocks.OAK_LEAVES, BlockTags.DIRT,
                 3,
                 List.of(new AlterGroundDecorator(SimpleStateProvider.simple(Blocks.MOSS_BLOCK)))
-                );
+        );
     });
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> V1_TEST_TREE2 = createConfiguredFeature("v1_test_tree_2", TYGFeatures.TREE_FROM_NBT_V1, configuredFeatureBootstapContext -> {

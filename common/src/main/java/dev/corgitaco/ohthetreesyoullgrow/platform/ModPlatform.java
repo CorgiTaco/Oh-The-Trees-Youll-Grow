@@ -12,6 +12,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.MobBucketItem;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.material.Fluid;
 
 import java.nio.file.Path;
@@ -65,6 +67,8 @@ public interface ModPlatform {
     MobBucketItem createMobBucketItem(Supplier<? extends EntityType<?>> entitySupplier, Supplier<? extends Fluid> fluidSupplier, Supplier<? extends SoundEvent> soundSupplier, Item.Properties properties);
 
     CreativeModeTab creativeModeTab();
+
+    <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerTreeFromStructureNBTFeature(Supplier<T> feature, String name);
 
     enum Platform {
         FORGE,

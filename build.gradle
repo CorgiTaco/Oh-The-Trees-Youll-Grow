@@ -1,18 +1,8 @@
 plugins {
-    id 'fabric-loom' version '1.2-SNAPSHOT' apply(false)
+    id 'fabric-loom' version '1.3-SNAPSHOT' apply(false)
     id 'net.minecraftforge.gradle' version '[6.0,6.2)' apply(false)
     id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT' apply(false)
     id("org.spongepowered.mixin") version "0.7-SNAPSHOT" apply(false)
-    id 'com.matyrobbrt.mc.registrationutils' version '1.20-1.0.0'
-}
-
-registrationUtils {
-    group 'corgitaco.ohthetreesyoullgrow.reg'
-    projects {
-        Common { type 'common'; project ':common' }
-        Fabric { type 'fabric'; project ':fabric' }
-        Forge { type 'forge'; project ':forge' }
-    }
 }
 
 subprojects {
@@ -23,8 +13,8 @@ subprojects {
     java.withJavadocJar()
 
     dependencies {
-        compileOnly group: 'com.google.auto.service', name: 'auto-service', version: '1.1.0'
-        annotationProcessor group: 'com.google.auto.service', name: 'auto-service', version: '1.1.0'
+        compileOnly group: 'com.google.auto.service', name: 'auto-service', version: '1.1.1'
+        annotationProcessor group: 'com.google.auto.service', name: 'auto-service', version: '1.1.1'
     }
         
     jar {
@@ -84,7 +74,6 @@ subprojects {
     // metadata includes mapped dependencies which are not reasonably consumable by
     // other mod developers.
     tasks.withType(GenerateModuleMetadata).configureEach {
-
         enabled = false
     }
 }
