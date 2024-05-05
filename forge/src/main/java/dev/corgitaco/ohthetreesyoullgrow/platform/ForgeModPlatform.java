@@ -1,6 +1,7 @@
 package dev.corgitaco.ohthetreesyoullgrow.platform;
 
 import com.google.auto.service.AutoService;
+import com.mojang.serialization.Codec;
 import dev.corgitaco.ohthetreesyoullgrow.Constants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -14,6 +15,8 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -107,10 +110,19 @@ public class ForgeModPlatform implements ModPlatform {
     }
 
     @Override
-    public <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerTreeFromStructureNBTFeature(Supplier<T> feature, String name) {
+    public <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerFeature(Supplier<T> feature, String name) {
         DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registries.FEATURE, Constants.MOD_ID);
         Supplier<T> hold = FEATURES.register(name, feature);
         FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        return hold;
+    }
+
+    @Override
+    public <P extends TreeDecorator> Supplier<TreeDecoratorType<P>> registerTreeDecoratorType(Supplier<Codec<P>> codec, String name) {
+        DeferredRegister<TreeDecoratorType<?>> FEATURES = DeferredRegister.create(Registries.TREE_DECORATOR_TYPE, Constants.MOD_ID);
+        Supplier<TreeDecoratorType<P>> hold = FEATURES.register(name, () -> new TreeDecoratorType<>(codec.get()));
+        FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());
+
         return hold;
     }
 

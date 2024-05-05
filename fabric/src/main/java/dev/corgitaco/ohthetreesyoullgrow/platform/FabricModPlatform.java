@@ -1,6 +1,7 @@
 package dev.corgitaco.ohthetreesyoullgrow.platform;
 
 import com.google.auto.service.AutoService;
+import com.mojang.serialization.Codec;
 import dev.corgitaco.ohthetreesyoullgrow.Constants;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.event.Event;
@@ -20,6 +21,8 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.minecraft.world.level.material.Fluid;
 
 import java.nio.file.Path;
@@ -101,9 +104,14 @@ public class FabricModPlatform implements ModPlatform {
     }
 
     @Override
-    public <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerTreeFromStructureNBTFeature(Supplier<T> feature, String name) {
+    public <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerFeature(Supplier<T> feature, String name) {
         T temp = Registry.register(BuiltInRegistries.FEATURE, new ResourceLocation(Constants.MOD_ID, name), feature.get());
         return () -> temp;
+    }
+
+    @Override
+    public <P extends TreeDecorator> Supplier<TreeDecoratorType<P>> registerTreeDecoratorType(Supplier<Codec<P>> codec, String name) {
+        return () -> Registry.register(BuiltInRegistries.TREE_DECORATOR_TYPE, new ResourceLocation(Constants.MOD_ID, name), new TreeDecoratorType<>(codec.get()));
     }
 
 }

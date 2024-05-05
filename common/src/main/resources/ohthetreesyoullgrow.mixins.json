@@ -9,8 +9,7 @@
     "MixinServerLevel",
     "chunk.MixinChunkAccess",
     "chunk.MixinChunkSerializer",
-    "chunk.MixinLevelChunk",
-    "dev.MinecraftServerFastSpawnMixin"
+    "chunk.MixinLevelChunk"
   ],
   "client": [
   ],

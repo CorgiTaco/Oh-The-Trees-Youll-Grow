@@ -21,9 +21,6 @@ public class TYGMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.contains("MinecraftServerFastSpawnMixin")) {
-            return ModPlatform.INSTANCE.isDevEnvironment();
-        }
         return true;
     }
 
