@@ -2,8 +2,6 @@ package dev.corgitaco.ohthetreesyoullgrow.platform;
 
 import com.google.auto.service.AutoService;
 import dev.corgitaco.ohthetreesyoullgrow.Constants;
-import dev.corgitaco.ohthetreesyoullgrow.world.level.levelgen.feature.TreeFromStructureNBTFeature;
-import dev.corgitaco.ohthetreesyoullgrow.world.level.levelgen.feature.configurations.TreeFromStructureNBTConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -15,6 +13,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -108,9 +107,9 @@ public class ForgeModPlatform implements ModPlatform {
     }
 
     @Override
-    public Supplier<Feature<TreeFromStructureNBTConfig>> registerTreeFromStructureNBTFeature(TreeFromStructureNBTFeature feature, String name) {
+    public <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerTreeFromStructureNBTFeature(T feature, String name) {
         DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registries.FEATURE, Constants.MOD_ID);
-        Supplier<Feature<TreeFromStructureNBTConfig>> hold = FEATURES.register(name, () -> feature);
+        Supplier<T> hold = FEATURES.register(name, () -> feature);
         FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());
         return hold;
     }

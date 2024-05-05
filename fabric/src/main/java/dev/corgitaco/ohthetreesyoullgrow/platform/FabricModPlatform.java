@@ -2,8 +2,6 @@ package dev.corgitaco.ohthetreesyoullgrow.platform;
 
 import com.google.auto.service.AutoService;
 import dev.corgitaco.ohthetreesyoullgrow.Constants;
-import dev.corgitaco.ohthetreesyoullgrow.world.level.levelgen.feature.TreeFromStructureNBTFeature;
-import dev.corgitaco.ohthetreesyoullgrow.world.level.levelgen.feature.configurations.TreeFromStructureNBTConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
@@ -21,6 +19,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.material.Fluid;
 
 import java.nio.file.Path;
@@ -102,8 +101,9 @@ public class FabricModPlatform implements ModPlatform {
     }
 
     @Override
-    public Supplier<Feature<TreeFromStructureNBTConfig>> registerTreeFromStructureNBTFeature(TreeFromStructureNBTFeature feature, String name) {
-        Feature<TreeFromStructureNBTConfig> temp = Registry.register(BuiltInRegistries.FEATURE, new ResourceLocation(Constants.MOD_ID, name), feature);
+    public <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerTreeFromStructureNBTFeature(T feature, String name) {
+        T temp = Registry.register(BuiltInRegistries.FEATURE, new ResourceLocation(Constants.MOD_ID, name), feature);
         return () -> temp;
     }
+
 }
