@@ -1,6 +1,4 @@
 import com.modrinth.minotaur.TaskModrinthUpload
-import com.modrinth.minotaur.dependencies.DependencyType
-import com.modrinth.minotaur.dependencies.ModDependency
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 import java.util.stream.Collectors
 
@@ -10,7 +8,7 @@ plugins {
     id 'net.minecraftforge.gradle'
     id 'org.spongepowered.mixin'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
-    id "net.darkhax.curseforgegradle" version "1.1.18"
+    id "net.darkhax.curseforgegradle" version "1.1.24"
     id "com.modrinth.minotaur" version "2.+"
 }
 base {
@@ -129,7 +127,7 @@ sourceSets.main.resources.srcDir project(":common").file('src/generated/resource
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":common")
-    annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
+    annotationProcessor("org.spongepowered:mixin:0.8.6:processor")
     dataImplementation sourceSets.main.output
 }
 

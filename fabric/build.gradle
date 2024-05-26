@@ -7,7 +7,7 @@ plugins {
     id 'maven-publish'
     id 'fabric-loom'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
-    id "net.darkhax.curseforgegradle" version "1.1.18"
+    id "net.darkhax.curseforgegradle" version "1.1.24"
     id "com.modrinth.minotaur" version "2.+"
 }
 
@@ -31,8 +31,8 @@ dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}+${minecraft_version}"
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
     implementation project(":common")
 }
 
