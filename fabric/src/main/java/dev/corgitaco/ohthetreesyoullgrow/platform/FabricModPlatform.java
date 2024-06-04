@@ -111,7 +111,8 @@ public class FabricModPlatform implements ModPlatform {
 
     @Override
     public <P extends TreeDecorator> Supplier<TreeDecoratorType<P>> registerTreeDecoratorType(Supplier<Codec<P>> codec, String name) {
-        return () -> Registry.register(BuiltInRegistries.TREE_DECORATOR_TYPE, new ResourceLocation(Constants.MOD_ID, name), new TreeDecoratorType<>(codec.get()));
+        TreeDecoratorType<P> temp = Registry.register(BuiltInRegistries.TREE_DECORATOR_TYPE, new ResourceLocation(Constants.MOD_ID, name), new TreeDecoratorType<>(codec.get()));
+        return () -> temp;
     }
 
 }
