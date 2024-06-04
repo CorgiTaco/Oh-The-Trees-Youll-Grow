@@ -4,7 +4,6 @@ import com.google.auto.service.AutoService;
 import com.mojang.serialization.Codec;
 import dev.corgitaco.ohthetreesyoullgrow.Constants;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -28,6 +27,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.nio.file.Path;
 import java.util.function.Supplier;
@@ -111,7 +111,7 @@ public class ForgeModPlatform implements ModPlatform {
 
     @Override
     public <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerFeature(Supplier<T> feature, String name) {
-        DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registries.FEATURE, Constants.MOD_ID);
+        DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, Constants.MOD_ID);
         Supplier<T> hold = FEATURES.register(name, feature);
         FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());
         return hold;
@@ -119,7 +119,7 @@ public class ForgeModPlatform implements ModPlatform {
 
     @Override
     public <P extends TreeDecorator> Supplier<TreeDecoratorType<P>> registerTreeDecoratorType(Supplier<Codec<P>> codec, String name) {
-        DeferredRegister<TreeDecoratorType<?>> FEATURES = DeferredRegister.create(Registries.TREE_DECORATOR_TYPE, Constants.MOD_ID);
+        DeferredRegister<TreeDecoratorType<?>> FEATURES = DeferredRegister.create(ForgeRegistries.TREE_DECORATOR_TYPES, Constants.MOD_ID);
         Supplier<TreeDecoratorType<P>> hold = FEATURES.register(name, () -> new TreeDecoratorType<>(codec.get()));
         FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());
 
