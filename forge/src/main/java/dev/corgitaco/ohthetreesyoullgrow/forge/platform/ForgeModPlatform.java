@@ -5,21 +5,13 @@ import com.mojang.serialization.Codec;
 import dev.corgitaco.ohthetreesyoullgrow.Constants;
 import dev.corgitaco.ohthetreesyoullgrow.platform.ModPlatform;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.ModList;
@@ -88,29 +80,6 @@ public class ForgeModPlatform implements ModPlatform {
     }
 
     @Override
-    public SpawnEggItem createSpawnEgg(Supplier<? extends EntityType<? extends Mob>> type, int backgroundColor, int highlightColor, Item.Properties properties) {
-        return new ForgeSpawnEggItem(type, backgroundColor, highlightColor, properties);
-    }
-
-    @Override
-    public MobBucketItem createMobBucketItem(Supplier<? extends EntityType<?>> entitySupplier, Supplier<? extends Fluid> fluidSupplier, Supplier<? extends SoundEvent> soundSupplier, Item.Properties properties) {
-        return new MobBucketItem(entitySupplier, fluidSupplier, soundSupplier, properties);
-    }
-
-    @Override
-    public CreativeModeTab creativeModeTab() {
-        CreativeModeTab.Builder builder = CreativeModeTab.builder();
-
-        builder.icon(() -> new ItemStack(Items.POPPY));
-        builder.title(Component.translatable("itemGroup." + Constants.MOD_ID + "." + Constants.MOD_ID));
-        builder.withSearchBar();
-        builder.withBackgroundLocation(new ResourceLocation("minecraft", "textures/gui/container/creative_inventory/tab_item_search.png"));
-        builder.displayItems((displayParameters, pOutput) -> {
-        });
-        return builder.build();
-    }
-
-    @Override
     public <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerFeature(Supplier<T> feature, String name) {
         DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, Constants.MOD_ID);
         Supplier<T> hold = FEATURES.register(name, feature);
@@ -123,7 +92,6 @@ public class ForgeModPlatform implements ModPlatform {
         DeferredRegister<TreeDecoratorType<?>> FEATURES = DeferredRegister.create(ForgeRegistries.TREE_DECORATOR_TYPES, Constants.MOD_ID);
         Supplier<TreeDecoratorType<P>> hold = FEATURES.register(name, () -> new TreeDecoratorType<>(codec.get()));
         FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());
-
         return hold;
     }
 
