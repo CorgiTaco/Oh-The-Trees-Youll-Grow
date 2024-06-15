@@ -1,5 +1,6 @@
-package dev.corgitaco.ohthetreesyoullgrow;
+package dev.corgitaco.ohthetreesyoullgrow.forge.data;
 
+import dev.corgitaco.ohthetreesyoullgrow.Constants;
 import dev.corgitaco.ohthetreesyoullgrow.data.worldgen.features.TYGConfiguredFeatures;
 import dev.corgitaco.ohthetreesyoullgrow.data.worldgen.features.TYGPlacedFeatures;
 import net.minecraft.core.RegistrySetBuilder;

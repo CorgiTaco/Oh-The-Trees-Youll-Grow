@@ -57,7 +57,8 @@ tasks {
     }
 
     shadowJar {
-        exclude("fabric.mod.json", "architectury.common.json", ".cache/**")
+        exclude("fabric.mod.json", "architectury.common.json", ".cache/**",
+            "dev/corgitaco/ohthetreesyoullgrow/forge/data/**")
         configurations = listOf(project.configurations.getByName("shadowCommon"))
         archiveClassifier.set("dev-shadow")
     }
