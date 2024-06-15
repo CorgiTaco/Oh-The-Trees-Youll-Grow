@@ -20,7 +20,7 @@
     "environment": "*",
     "entrypoints": {
         "main": [
-            "dev.corgitaco.ohthetreesyoullgrow.OhTheTreesYoullGrowFabric"
+            "dev.corgitaco.ohthetreesyoullgrow.fabric.OhTheTreesYoullGrowFabric"
         ]
     },
     "mixins": [

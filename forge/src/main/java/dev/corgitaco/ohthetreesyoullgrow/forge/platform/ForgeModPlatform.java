@@ -1,8 +1,9 @@
-package dev.corgitaco.ohthetreesyoullgrow.platform;
+package dev.corgitaco.ohthetreesyoullgrow.forge.platform;
 
 import com.google.auto.service.AutoService;
 import com.mojang.serialization.Codec;
 import dev.corgitaco.ohthetreesyoullgrow.Constants;
+import dev.corgitaco.ohthetreesyoullgrow.platform.ModPlatform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

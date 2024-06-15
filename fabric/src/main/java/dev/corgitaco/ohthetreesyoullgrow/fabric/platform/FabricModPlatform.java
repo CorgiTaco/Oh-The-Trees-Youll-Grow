@@ -1,8 +1,9 @@
-package dev.corgitaco.ohthetreesyoullgrow.platform;
+package dev.corgitaco.ohthetreesyoullgrow.fabric.platform;
 
 import com.google.auto.service.AutoService;
 import com.mojang.serialization.Codec;
 import dev.corgitaco.ohthetreesyoullgrow.Constants;
+import dev.corgitaco.ohthetreesyoullgrow.platform.ModPlatform;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;

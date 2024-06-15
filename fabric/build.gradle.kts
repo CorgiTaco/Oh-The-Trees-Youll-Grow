@@ -22,8 +22,6 @@ loom {
     mixin.useLegacyMixinAp.set(false)
 }
 
-fabricApi.configureDataGeneration()
-
 dependencies {
     modImplementation("net.fabricmc:fabric-loader:${project.properties["fabric_loader_version"]}")
     modApi("net.fabricmc.fabric-api:fabric-api:${project.properties["fabric_api_version"]}+$minecraftVersion")
