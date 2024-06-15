@@ -1,6 +1,7 @@
 import com.hypherionmc.modpublisher.properties.CurseEnvironment
 import com.hypherionmc.modpublisher.properties.ModLoader
 import com.hypherionmc.modpublisher.properties.ReleaseType
+import org.apache.commons.lang3.CharSet
 
 plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
@@ -73,6 +74,7 @@ components {
     }
 }
 
+
 publisher {
     apiKeys {
         curseforge(getPublishingCredentials().first)
@@ -86,7 +88,7 @@ publisher {
     setReleaseType(ReleaseType.BETA)
     projectVersion.set(project.version.toString())
     displayName.set("$jarName-${projectVersion.get()}")
-    changelog.set("test changelog")
+    changelog.set(projectDir.toPath().parent.resolve("CHANGELOG.md").toFile().readText())
     artifact.set(tasks.remapJar)
     setGameVersions(minecraftVersion)
     setLoaders(ModLoader.FABRIC, ModLoader.QUILT)

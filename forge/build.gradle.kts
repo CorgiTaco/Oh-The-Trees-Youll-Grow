@@ -103,7 +103,7 @@ publisher {
     setReleaseType(ReleaseType.BETA)
     projectVersion.set(project.version.toString())
     displayName.set("$jarName-${projectVersion.get()}")
-    changelog.set("test changelog")
+    changelog.set(projectDir.toPath().parent.resolve("CHANGELOG.md").toFile().readText())
     artifact.set(tasks.remapJar)
     setGameVersions(minecraftVersion)
     setLoaders(ModLoader.FORGE, ModLoader.NEOFORGE)
