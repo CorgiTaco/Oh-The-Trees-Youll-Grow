@@ -3,11 +3,12 @@ pluginManagement.repositories {
     maven("https://maven.architectury.dev/")
     maven("https://maven.minecraftforge.net/")
     maven("https://maven.neoforged.net/releases/")
+    maven("https://maven.firstdarkdev.xyz/releases")
     gradlePluginPortal()
 }
 
 plugins {
-    id("com.gradle.develocity") version("3.17.4")
+    id("com.gradle.develocity") version("3.17.5")
 }
 
 develocity.buildScan {
