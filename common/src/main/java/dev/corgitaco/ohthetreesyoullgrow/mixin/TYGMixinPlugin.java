@@ -1,6 +1,5 @@
 package dev.corgitaco.ohthetreesyoullgrow.mixin;
 
-import dev.corgitaco.ohthetreesyoullgrow.platform.ModPlatform;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;

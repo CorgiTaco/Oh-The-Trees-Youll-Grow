@@ -1,3 +1,6 @@
+# 1.2.0
+* Move project to Arch Loom
+
 # 1.1.2
 * Fix Tree Decorator Types not being registered on Fabric
 * Use ForgeRegistries for Registration on Forge
