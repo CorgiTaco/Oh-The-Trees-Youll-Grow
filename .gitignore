@@ -21,4 +21,6 @@ build
 # other
 eclipse
 run
-/common/src/generated/resources/.cache/
+*.cache
+*.log
+.architectury-transformer

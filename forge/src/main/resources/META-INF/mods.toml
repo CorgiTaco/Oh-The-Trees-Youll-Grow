@@ -5,12 +5,12 @@ issueTrackerURL="https://github.com/CorgiTaco/Oh-The-Trees-Youll-Grow/issues" #o
 [[mods]] #mandatory
 modId = "ohthetreesyoullgrow" #mandatory
 version = "${version}" #mandatory
-displayName = "${mod_name}" #mandatory
+displayName = "Oh The Trees You'll Grow" #mandatory
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional (see https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/)
 displayURL="https://curseforge.com/minecraft/mc-mods/oh-the-trees-youll-grow" #optional (displayed in the mod UI)
 logoFile = "logo.png" #optional (needs to be in the root of your mod jar (root of your 'resources' folder))
 credits = "Joseph T. McQuigg (JT122406)" #optional
-authors = "${mod_author}" #optional
+authors = "Corgi Taco" #optional
 description = '''
 A Minecraft library that aims to give users incredible configurability by allowing the creation of trees with Minecraft's structure template `.nbt` files.
 ''' #mandatory (Supports multiline text)
