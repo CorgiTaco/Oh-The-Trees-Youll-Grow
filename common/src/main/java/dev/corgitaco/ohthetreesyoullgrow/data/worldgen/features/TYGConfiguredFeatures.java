@@ -67,6 +67,31 @@ public class TYGConfiguredFeatures {
         );
     });
 
+    public static final ResourceKey<ConfiguredFeature<?, ?>> V1_TEST_MUSHROOM1 = createConfiguredFeature("v1_test_mushroom_1", TYGFeatures.TREE_FROM_NBT_V1, configuredFeatureBootstapContext -> {
+        return new TreeFromStructureNBTConfig(
+                Constants.createLocation("features/mushrooms/testv1/test_mushroom_trunk1"),
+                Constants.createLocation("features/mushrooms/testv1/test_mushroom_canopy1"),
+                UniformInt.of(5, 10),
+                BlockStateProvider.simple(Blocks.MUSHROOM_STEM),
+                BlockStateProvider.simple(Blocks.RED_MUSHROOM_BLOCK),
+                Blocks.MUSHROOM_STEM, Blocks.RED_MUSHROOM_BLOCK, BlockTags.MUSHROOM_GROW_BLOCK,
+                3,
+                List.of()
+        );
+    });
+
+    public static final ResourceKey<ConfiguredFeature<?, ?>> V1_TEST_MUSHROOM2 = createConfiguredFeature("v1_test_mushroom_2", TYGFeatures.TREE_FROM_NBT_V1, configuredFeatureBootstapContext -> {
+        return new TreeFromStructureNBTConfig(
+                Constants.createLocation("features/mushrooms/testv1/test_mushroom_trunk1"),
+                Constants.createLocation("features/mushrooms/testv1/test_mushroom_canopy1"),
+                UniformInt.of(5, 10),
+                BlockStateProvider.simple(Blocks.MUSHROOM_STEM),
+                BlockStateProvider.simple(Blocks.BROWN_MUSHROOM_BLOCK),
+                Blocks.MUSHROOM_STEM, Blocks.RED_MUSHROOM_BLOCK, BlockTags.MUSHROOM_GROW_BLOCK,
+                3,
+                List.of()
+        );
+    });
 
     public static <FC extends FeatureConfiguration, F extends Feature<FC>> ResourceKey<ConfiguredFeature<?, ?>> createConfiguredFeature(String id, Supplier<? extends F> feature, Function<BootstapContext<ConfiguredFeature<?, ?>>, ? extends FC> config) {
         ResourceLocation bygID = Constants.createLocation(id);

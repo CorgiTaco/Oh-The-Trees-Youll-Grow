@@ -24,6 +24,8 @@ public class TYGPlacedFeatures {
     public static final ResourceKey<PlacedFeature> V1_TEST_TREE2 = createPlacedFeature("v1_test_tree2", TYGConfiguredFeatures.V1_TEST_TREE2, () -> CountPlacement.of(1));
     public static final ResourceKey<PlacedFeature> V1_TEST_TREE3 = createPlacedFeature("v1_test_tree3", TYGConfiguredFeatures.V1_TEST_TREE3, () -> CountPlacement.of(1));
 
+    public static final ResourceKey<PlacedFeature> V1_TEST_MUSHROOM1 = createPlacedFeature("v1_test_mushroom1", TYGConfiguredFeatures.V1_TEST_MUSHROOM1, () -> CountPlacement.of(1));
+    public static final ResourceKey<PlacedFeature> V1_TEST_MUSHROOM2 = createPlacedFeature("v1_test_mushroom2", TYGConfiguredFeatures.V1_TEST_MUSHROOM2, () -> CountPlacement.of(1));
 
     @SafeVarargs
     public static <FC extends FeatureConfiguration> ResourceKey<PlacedFeature> createPlacedFeature(String id, ResourceKey<ConfiguredFeature<?, ?>> feature, Supplier<PlacementModifier>... placementModifiers) {

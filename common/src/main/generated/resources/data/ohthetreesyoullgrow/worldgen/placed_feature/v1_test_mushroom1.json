@@ -1,0 +1,9 @@
+{
+  "feature": "ohthetreesyoullgrow:v1_test_mushroom_1",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 1
+    }
+  ]
+}

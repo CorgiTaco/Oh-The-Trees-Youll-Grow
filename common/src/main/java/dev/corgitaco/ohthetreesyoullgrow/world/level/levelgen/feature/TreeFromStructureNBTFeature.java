@@ -11,9 +11,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
@@ -162,7 +162,7 @@ public class TreeFromStructureNBTFeature extends Feature<TreeFromStructureNBTCon
     public static void placeLogsWithRotation(BlockStateProvider logProvider, WorldGenLevel level, BlockPos origin, RandomSource random, StructurePlaceSettings placeSettings, BlockPos centerOffset, List<StructureTemplate.StructureBlockInfo> logs, Set<BlockPos> trunkPositions) {
         for (StructureTemplate.StructureBlockInfo trunk : logs) {
             BlockPos pos = getModifiedPos(placeSettings, trunk, centerOffset, origin);
-            level.setBlock(pos, getTransformedState(logProvider.getState(random, pos), trunk.state(), placeSettings.getRotation()), 2);
+            level.setBlock(pos, getTransformedState(pos, logProvider.getState(random, pos), trunk.state(), placeSettings.getRotation(), level), 2);
             trunkPositions.add(pos);
         }
     }
@@ -179,17 +179,7 @@ public class TreeFromStructureNBTFeature extends Feature<TreeFromStructureNBTCon
             BlockPos modifiedPos = getModifiedPos(placeSettings, leaf, canopyCenterOffset, origin);
 
             if (leavesPlacementFilter.test(level, modifiedPos)) {
-                BlockState state = leavesProvider.getState(random, modifiedPos);
-
-                if (state.hasProperty(LeavesBlock.DISTANCE) && leaf.state().hasProperty(LeavesBlock.DISTANCE)) {
-                    state = state.setValue(LeavesBlock.DISTANCE, leaf.state().getValue(LeavesBlock.DISTANCE));
-                }
-                if (state.hasProperty(LeavesBlock.WATERLOGGED)) {
-                    FluidState fluidState = level.getFluidState(modifiedPos);
-                    if (fluidState.is(Fluids.WATER) && fluidState.getAmount() >= 7) {
-                        state.setValue(LeavesBlock.WATERLOGGED, true);
-                    }
-                }
+                BlockState state = getTransformedState(modifiedPos, leavesProvider.getState(random, modifiedPos), leaf.state(), placeSettings.getRotation(), level);
 
                 level.setBlock(modifiedPos, state, 2);
                 BlockState finalState = state;
@@ -198,6 +188,9 @@ public class TreeFromStructureNBTFeature extends Feature<TreeFromStructureNBTCon
                         BlockState blockState = LeavesBlock.updateDistance(finalState, level, modifiedPos);
                         if (blockState.getValue(LeavesBlock.DISTANCE) < LeavesBlock.DECAY_DISTANCE) {
                             leavePositions.add(modifiedPos);
+                            if (blockState.hasProperty(LeavesBlock.PERSISTENT)) {
+                                blockState = blockState.setValue(LeavesBlock.PERSISTENT, false);
+                            }
                             level.setBlock(modifiedPos, blockState, 2);
                             level.scheduleTick(modifiedPos, blockState.getBlock(), 0);
                         } else {
@@ -219,11 +212,16 @@ public class TreeFromStructureNBTFeature extends Feature<TreeFromStructureNBTCon
             BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos().set(pos);
 
             for (int i = 0; i < maxTrunkBuildingDepth; i++) {
-                if (!level.getBlockState(mutableBlockPos).canOcclude() || level.getBlockState(mutableBlockPos).canBeReplaced()) {
+                if (!groundFilter.test(level, mutableBlockPos)) {
                     if (level instanceof Level) { // Drop the replaced block.
                         level.removeBlock(mutableBlockPos, true);
                     }
-                    level.setBlock(mutableBlockPos, logProvider.getState(randomSource, mutableBlockPos), 2);
+
+
+                    BlockState state = logProvider.getState(randomSource, mutableBlockPos);
+
+                    state = Block.updateFromNeighbourShapes(state, level, mutableBlockPos);
+                    level.setBlock(mutableBlockPos, state, 2);
                     mutableBlockPos.move(Direction.DOWN);
                 } else {
                     ((RandomTickScheduler) level.getChunk(mutableBlockPos)).scheduleRandomTick(mutableBlockPos.immutable());
@@ -235,26 +233,25 @@ public class TreeFromStructureNBTFeature extends Feature<TreeFromStructureNBTCon
 
 
     @NotNull
-    public static BlockState getTransformedState(BlockState state, BlockState canopyLogState, Rotation rotation) {
+    public static BlockState getTransformedState(BlockPos modifiedPos, BlockState state, BlockState nbtState, Rotation rotation, WorldGenLevel level) {
         for (Property property : state.getProperties()) {
-            if (canopyLogState.hasProperty(property)) {
-                Comparable value = canopyLogState.getValue(property);
+            if (nbtState.hasProperty(property)) {
+                Comparable value = nbtState.getValue(property);
                 state = state.setValue(property, value);
             }
         }
 
-        if (state.hasProperty(RotatedPillarBlock.AXIS)) {
-            Direction.Axis axis = state.getValue(RotatedPillarBlock.AXIS);
-            if (axis.isHorizontal()) {
-                if (rotation == Rotation.CLOCKWISE_90 || rotation == Rotation.COUNTERCLOCKWISE_90) {
-                    if (axis == Direction.Axis.X) {
-                        state = state.setValue(RotatedPillarBlock.AXIS, Direction.Axis.Z);
-                    } else if (axis == Direction.Axis.Z) {
-                        state = state.setValue(RotatedPillarBlock.AXIS, Direction.Axis.X);
-                    }
-                }
+        if (state.hasProperty(LeavesBlock.WATERLOGGED)) {
+            FluidState fluidState = level.getFluidState(modifiedPos);
+            if (fluidState.is(Fluids.WATER) && fluidState.getAmount() >= 7) {
+               state = state.setValue(LeavesBlock.WATERLOGGED, true);
+            } else {
+               state = state.setValue(LeavesBlock.WATERLOGGED, false);
             }
         }
+
+        state = state.rotate(rotation);
+
         return state;
     }
 
