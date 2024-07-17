@@ -87,7 +87,7 @@ publisher {
     githubRepo.set("https://github.com/CorgiTaco/Oh-The-Trees-Youll-Grow")
     setReleaseType(ReleaseType.BETA)
     projectVersion.set("$minecraftVersion-${project.version}-fabric")
-    displayName.set("$jarName-${projectVersion.get()}")
+    displayName.set(jarName)
     changelog.set(projectDir.toPath().parent.resolve("CHANGELOG.md").toFile().readText())
     artifact.set(tasks.remapJar)
     setGameVersions(minecraftVersion)
