@@ -14,7 +14,7 @@ architectury {
 }
 
 val minecraftVersion = project.properties["minecraft_version"] as String
-val jarName = base.archivesName.get() + "-Fabric-" + project.properties["minecraft_version"]
+val jarName = base.archivesName.get() + "-fabric-" + project.properties["minecraft_version"]
 
 configurations {
     create("common")
