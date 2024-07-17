@@ -13,7 +13,7 @@ architectury {
 }
 
 val minecraftVersion = project.properties["minecraft_version"] as String
-val jarName = base.archivesName.get() + "-Forge"
+val jarName = base.archivesName.get() + "-Forge-" + project.properties["minecraft_version"]
 
 configurations {
     create("common")
@@ -98,7 +98,7 @@ publisher {
     }
 
     curseID.set(project.properties["curseforge_id"].toString())
-    modrinthID.set("modrinth_id")
+    modrinthID.set(project.properties["modrinth_id"].toString())
     githubRepo.set("https://github.com/CorgiTaco/Oh-The-Trees-Youll-Grow")
     setReleaseType(ReleaseType.BETA)
     projectVersion.set(project.version.toString())
