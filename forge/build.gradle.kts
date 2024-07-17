@@ -113,7 +113,8 @@ publisher {
 
 publishing {
     publications.create<MavenPublication>("mavenForge") {
-        artifactId = "${project.properties["archives_base_name"]}" + "-Forge"
+        artifactId = "${project.properties["archives_base_name"]}" + "-forge"
+        version = "$minecraftVersion-" + project.version.toString()
         from(components["java"])
     }
 
