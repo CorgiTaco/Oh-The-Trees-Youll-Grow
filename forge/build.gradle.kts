@@ -100,7 +100,7 @@ publisher {
     curseID.set(project.properties["curseforge_id"].toString())
     modrinthID.set(project.properties["modrinth_id"].toString())
     githubRepo.set("https://github.com/CorgiTaco/Oh-The-Trees-Youll-Grow")
-    setReleaseType(ReleaseType.BETA)
+    setReleaseType(ReleaseType.RELEASE)
     projectVersion.set("$minecraftVersion-${project.version}-forge")
     displayName.set(jarName)
     changelog.set(projectDir.toPath().parent.resolve("CHANGELOG.md").toFile().readText())
