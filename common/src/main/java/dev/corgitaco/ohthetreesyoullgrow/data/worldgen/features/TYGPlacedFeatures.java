@@ -33,13 +33,11 @@ public class TYGPlacedFeatures {
     }
 
     public static <FC extends FeatureConfiguration> ResourceKey<PlacedFeature> createPlacedFeature(String id, ResourceKey<ConfiguredFeature<?, ?>> feature, Supplier<List<PlacementModifier>> placementModifiers) {
-        ResourceLocation bygID = Constants.createLocation(id);
+        ResourceLocation location = Constants.createLocation(id);
 
-        ResourceKey<PlacedFeature> placedFeatureKey = ResourceKey.create(Registries.PLACED_FEATURE, bygID);
-
+        ResourceKey<PlacedFeature> placedFeatureKey = ResourceKey.create(Registries.PLACED_FEATURE, location);
 
         PLACED_FEATURE_FACTORIES.put(placedFeatureKey, configuredFeatureHolderGetter -> new PlacedFeature(configuredFeatureHolderGetter.getOrThrow(feature), placementModifiers.get()));
-
 
         return placedFeatureKey;
     }

@@ -1,7 +1,6 @@
 import com.hypherionmc.modpublisher.properties.CurseEnvironment
 import com.hypherionmc.modpublisher.properties.ModLoader
 import com.hypherionmc.modpublisher.properties.ReleaseType
-import org.apache.commons.lang3.CharSet
 
 plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
@@ -24,10 +23,7 @@ configurations {
     getByName("developmentFabric").extendsFrom(configurations["common"])
 }
 
-loom {
-    accessWidenerPath.set(project(":common").loom.accessWidenerPath)
-    mixin.useLegacyMixinAp.set(false)
-}
+loom.accessWidenerPath.set(project(":common").loom.accessWidenerPath)
 
 dependencies {
     modImplementation("net.fabricmc:fabric-loader:${project.properties["fabric_loader_version"]}")

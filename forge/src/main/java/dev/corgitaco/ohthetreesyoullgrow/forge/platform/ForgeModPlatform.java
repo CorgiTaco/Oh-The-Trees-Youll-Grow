@@ -94,5 +94,4 @@ public class ForgeModPlatform implements ModPlatform {
         FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());
         return hold;
     }
-
 }

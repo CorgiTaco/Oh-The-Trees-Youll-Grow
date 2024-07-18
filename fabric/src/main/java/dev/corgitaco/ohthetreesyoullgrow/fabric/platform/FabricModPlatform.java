@@ -11,7 +11,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -82,14 +81,13 @@ public class FabricModPlatform implements ModPlatform {
 
     @Override
     public <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerFeature(Supplier<T> feature, String name) {
-        T temp = Registry.register(BuiltInRegistries.FEATURE, new ResourceLocation(Constants.MOD_ID, name), feature.get());
+        T temp = Registry.register(BuiltInRegistries.FEATURE, Constants.createLocation(name), feature.get());
         return () -> temp;
     }
 
     @Override
     public <P extends TreeDecorator> Supplier<TreeDecoratorType<P>> registerTreeDecoratorType(Supplier<Codec<P>> codec, String name) {
-        TreeDecoratorType<P> temp = Registry.register(BuiltInRegistries.TREE_DECORATOR_TYPE, new ResourceLocation(Constants.MOD_ID, name), new TreeDecoratorType<>(codec.get()));
+        TreeDecoratorType<P> temp = Registry.register(BuiltInRegistries.TREE_DECORATOR_TYPE, Constants.createLocation(name), new TreeDecoratorType<>(codec.get()));
         return () -> temp;
     }
-
 }

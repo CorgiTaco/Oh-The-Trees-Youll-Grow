@@ -41,7 +41,7 @@ public class AttachedToFruitLeavesDecorator extends AttachedToLeavesDecorator {
     }
 
     @Override
-    protected TreeDecoratorType<?> type() {
+    protected @NotNull TreeDecoratorType<?> type() {
         return TYGTreeDecoratorTypes.ATTACHED_TO_FRUIT_LEAVES.get();
     }
 
