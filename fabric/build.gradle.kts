@@ -3,7 +3,7 @@ import com.hypherionmc.modpublisher.properties.ModLoader
 import com.hypherionmc.modpublisher.properties.ReleaseType
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.github.johnrengelman.shadow")
     id("com.hypherionmc.modutils.modpublisher") version "2.+"
 }
 
@@ -13,14 +13,21 @@ architectury {
 }
 
 val minecraftVersion = project.properties["minecraft_version"] as String
-val jarName = base.archivesName.get() + "-fabric-" + project.properties["minecraft_version"]
 
 configurations {
     create("common")
-    create("shadowCommon")
+    "common" {
+        isCanBeResolved = true
+        isCanBeConsumed = false
+    }
+    create("shadowBundle")
     compileClasspath.get().extendsFrom(configurations["common"])
     runtimeClasspath.get().extendsFrom(configurations["common"])
     getByName("developmentFabric").extendsFrom(configurations["common"])
+    "shadowBundle" {
+        isCanBeResolved = true
+        isCanBeConsumed = false
+    }
 }
 
 loom.accessWidenerPath.set(project(":common").loom.accessWidenerPath)
@@ -30,11 +37,10 @@ dependencies {
     modApi("net.fabricmc.fabric-api:fabric-api:${project.properties["fabric_api_version"]}+$minecraftVersion")
 
     "common"(project(":common", "namedElements")) { isTransitive = false }
-    "shadowCommon"(project(":common", "transformProductionFabric")) { isTransitive = false }
+    "shadowBundle"(project(":common", "transformProductionFabric"))
 }
 
 tasks {
-    base.archivesName.set(jarName)
     processResources {
         inputs.property("version", project.version)
 
@@ -45,7 +51,7 @@ tasks {
 
     shadowJar {
         exclude("architectury.common.json")
-        configurations = listOf(project.configurations.getByName("shadowCommon"))
+        configurations = listOf(project.configurations.getByName("shadowBundle"))
         archiveClassifier.set("dev-shadow")
     }
 
@@ -54,23 +60,7 @@ tasks {
         inputFile.set(shadowJar.get().archiveFile)
         dependsOn(shadowJar)
     }
-
-    jar.get().archiveClassifier.set("dev")
-
-    sourcesJar {
-        val commonSources = project(":common").tasks.sourcesJar
-        dependsOn(commonSources)
-        from(commonSources.get().archiveFile.map { zipTree(it) })
-    }
 }
-
-components {
-    java.run {
-        if (this is AdhocComponentWithVariants)
-            withVariantsFromConfiguration(project.configurations.shadowRuntimeElements.get()) { skip() }
-    }
-}
-
 
 publisher {
     apiKeys {
@@ -84,7 +74,7 @@ publisher {
     githubRepo.set("https://github.com/CorgiTaco/Oh-The-Trees-Youll-Grow")
     setReleaseType(ReleaseType.RELEASE)
     projectVersion.set("$minecraftVersion-${project.version}-fabric")
-    displayName.set(jarName)
+    displayName.set("${project.properties["mod_name"]}-fabric-$minecraftVersion-${project.version}")
     changelog.set(projectDir.toPath().parent.resolve("CHANGELOG.md").toFile().readText())
     artifact.set(tasks.remapJar)
     setGameVersions(minecraftVersion)
@@ -95,29 +85,6 @@ publisher {
     curseDepends.required.set(depends)
     modrinthDepends.required.set(depends)
 }
-
-publishing {
-    publications.create<MavenPublication>("mavenFabric") {
-        artifactId = "${project.properties["archives_base_name"]}" + "-fabric"
-        version = "$minecraftVersion-" + project.version.toString()
-        from(components["java"])
-    }
-
-    repositories {
-        mavenLocal()
-        maven {
-            val releasesRepoUrl = "https://maven.jt-dev.tech/releases"
-            val snapshotsRepoUrl = "https://maven.jt-dev.tech/snapshots"
-            url = uri(if (project.version.toString().endsWith("SNAPSHOT") || project.version.toString().startsWith("0")) snapshotsRepoUrl else releasesRepoUrl)
-            name = "JTDev-Maven-Repository"
-            credentials {
-                username = project.properties["repoLogin"]?.toString()
-                password = project.properties["repoPassword"]?.toString()
-            }
-        }
-    }
-}
-
 
 private fun getPublishingCredentials(): Pair<String?, String?> {
     val curseForgeToken = (project.findProperty("curseforge_key") ?: System.getenv("CURSEFORGE_KEY") ?: "") as String?
