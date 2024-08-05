@@ -2,6 +2,7 @@ package dev.corgitaco.ohthetreesyoullgrow.world.level.levelgen.feature.configura
 
 import com.mojang.serialization.Codec;
 import dev.corgitaco.ohthetreesyoullgrow.platform.ModPlatform;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 
@@ -15,7 +16,7 @@ public class TYGTreeDecoratorTypes {
     public static final Supplier<TreeDecoratorType<AttachedToFruitLeavesDecorator>> ATTACHED_TO_FRUIT_LEAVES = register("attached_to_fruit_leaves", AttachedToFruitLeavesDecorator.CODEC::stable);
 
     private static <P extends TreeDecorator> Supplier<TreeDecoratorType<P>> register(String id, Supplier<Codec<P>> codec) {
-        return ModPlatform.INSTANCE.registerTreeDecoratorType(codec, id);
+        return ModPlatform.INSTANCE.register(BuiltInRegistries.TREE_DECORATOR_TYPE, id, () -> new TreeDecoratorType<>(codec.get()));
     }
 
     public static void register() {

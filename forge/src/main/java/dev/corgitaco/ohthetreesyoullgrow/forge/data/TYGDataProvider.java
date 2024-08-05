@@ -5,6 +5,7 @@ import dev.corgitaco.ohthetreesyoullgrow.data.worldgen.features.TYGConfiguredFea
 import dev.corgitaco.ohthetreesyoullgrow.data.worldgen.features.TYGPlacedFeatures;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,8 +22,7 @@ public class TYGDataProvider {
 
     @SubscribeEvent
     public static void onGatherData(GatherDataEvent event) {
-        final var gen = event.getGenerator();
-        final var existingFileHelper = event.getExistingFileHelper();
+        final DataGenerator gen = event.getGenerator();
         gen.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(gen.getPackOutput(), event.getLookupProvider(), BUILDER, Set.of(Constants.MOD_ID)));
     }
 }

@@ -1,3 +1,7 @@
+# 1.3.0
+* Rewrite Build Script
+* Generalize Registration
+
 # 1.2.0
 * Move project to Arch Loom
 * Add rotated block support

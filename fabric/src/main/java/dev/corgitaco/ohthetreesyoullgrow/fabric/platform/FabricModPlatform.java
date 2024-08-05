@@ -1,7 +1,6 @@
 package dev.corgitaco.ohthetreesyoullgrow.fabric.platform;
 
 import com.google.auto.service.AutoService;
-import com.mojang.serialization.Codec;
 import dev.corgitaco.ohthetreesyoullgrow.Constants;
 import dev.corgitaco.ohthetreesyoullgrow.platform.ModPlatform;
 import net.fabricmc.api.EnvType;
@@ -10,13 +9,8 @@ import net.fabricmc.fabric.api.event.EventFactory;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
-import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 
 import java.nio.file.Path;
 import java.util.function.Supplier;
@@ -80,14 +74,8 @@ public class FabricModPlatform implements ModPlatform {
     }
 
     @Override
-    public <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerFeature(Supplier<T> feature, String name) {
-        T temp = Registry.register(BuiltInRegistries.FEATURE, Constants.createLocation(name), feature.get());
-        return () -> temp;
-    }
-
-    @Override
-    public <P extends TreeDecorator> Supplier<TreeDecoratorType<P>> registerTreeDecoratorType(Supplier<Codec<P>> codec, String name) {
-        TreeDecoratorType<P> temp = Registry.register(BuiltInRegistries.TREE_DECORATOR_TYPE, Constants.createLocation(name), new TreeDecoratorType<>(codec.get()));
-        return () -> temp;
+    public <T> Supplier<T> register(Registry<? super T> registry, String name, Supplier<T> value) {
+        T value1 = Registry.register(registry, Constants.createLocation(name), value.get());
+        return () -> value1;
     }
 }

@@ -1,15 +1,11 @@
 package dev.corgitaco.ohthetreesyoullgrow.platform;
 
-import com.mojang.serialization.Codec;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
-import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 
 import java.nio.file.Path;
 import java.util.ServiceLoader;
@@ -57,8 +53,7 @@ public interface ModPlatform {
         void onTagsUpdated(RegistryAccess access);
     }
 
-    <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerFeature(Supplier<T> feature, String name);
-    <P extends TreeDecorator> Supplier<TreeDecoratorType<P>> registerTreeDecoratorType(Supplier<Codec<P>> codec, String name);
+    <T> Supplier<T> register(Registry<? super T> registry, String name, Supplier<T> value);
 
     enum Platform {
         FORGE,

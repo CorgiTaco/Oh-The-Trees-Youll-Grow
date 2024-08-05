@@ -1,28 +1,25 @@
 package dev.corgitaco.ohthetreesyoullgrow.forge.platform;
 
 import com.google.auto.service.AutoService;
-import com.mojang.serialization.Codec;
 import dev.corgitaco.ohthetreesyoullgrow.Constants;
 import dev.corgitaco.ohthetreesyoullgrow.platform.ModPlatform;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
-import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoader;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.function.Supplier;
 
 @AutoService(ModPlatform.class)
@@ -41,7 +38,7 @@ public class ForgeModPlatform implements ModPlatform {
 
     @Override
     public String curseForgeURL() {
-        return "";
+        return "https://www.curseforge.com/minecraft/mc-mods/oh-the-trees-youll-grow";
     }
 
     @Override
@@ -79,19 +76,10 @@ public class ForgeModPlatform implements ModPlatform {
         return !net.minecraftforge.event.ForgeEventFactory.blockGrowFeature(level, source, pos, null).getResult().equals(Event.Result.DENY);
     }
 
-    @Override
-    public <FC extends FeatureConfiguration, T extends Feature<FC>> Supplier<T> registerFeature(Supplier<T> feature, String name) {
-        DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, Constants.MOD_ID);
-        Supplier<T> hold = FEATURES.register(name, feature);
-        FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());
-        return hold;
-    }
+    public static final Map<ResourceKey<?>, DeferredRegister> CACHED = new Reference2ObjectOpenHashMap<>();
 
     @Override
-    public <P extends TreeDecorator> Supplier<TreeDecoratorType<P>> registerTreeDecoratorType(Supplier<Codec<P>> codec, String name) {
-        DeferredRegister<TreeDecoratorType<?>> FEATURES = DeferredRegister.create(ForgeRegistries.TREE_DECORATOR_TYPES, Constants.MOD_ID);
-        Supplier<TreeDecoratorType<P>> hold = FEATURES.register(name, () -> new TreeDecoratorType<>(codec.get()));
-        FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());
-        return hold;
+    public <T> Supplier<T> register(Registry<? super T> registry, String name, Supplier<T> value) {
+        return CACHED.computeIfAbsent(registry.key(), key -> DeferredRegister.create(registry.key().location(), Constants.MOD_ID)).register(name, value);
     }
 }
