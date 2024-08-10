@@ -1,6 +1,7 @@
 package dev.corgitaco.ohthetreesyoullgrow.world.level.levelgen.feature.configurations.treedecorators;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 public class AttachedToLogsDecorator extends TreeDecorator {
-    public static final Codec<AttachedToLogsDecorator> CODEC = RecordCodecBuilder.create(builder ->
+    public static final MapCodec<AttachedToLogsDecorator> CODEC = RecordCodecBuilder.mapCodec(builder ->
             builder.group(
                     Codec.floatRange(0.0F, 1.0F).fieldOf("probability").forGetter(attachedToLogsDecorator -> attachedToLogsDecorator.probability),
                     Codec.intRange(0, 16).fieldOf("exclusion_radius_xz").forGetter(attachedToLogsDecorator -> attachedToLogsDecorator.exclusionRadiusXZ),

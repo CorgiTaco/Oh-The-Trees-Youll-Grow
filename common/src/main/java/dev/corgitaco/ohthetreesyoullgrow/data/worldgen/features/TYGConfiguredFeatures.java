@@ -5,7 +5,7 @@ import dev.corgitaco.ohthetreesyoullgrow.world.level.levelgen.feature.TYGFeature
 import dev.corgitaco.ohthetreesyoullgrow.world.level.levelgen.feature.configurations.TreeFromStructureNBTConfig;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -90,7 +90,7 @@ public class TYGConfiguredFeatures {
         );
     });
 
-    public static <FC extends FeatureConfiguration, F extends Feature<FC>> ResourceKey<ConfiguredFeature<?, ?>> createConfiguredFeature(String id, Supplier<? extends F> feature, Function<BootstapContext<ConfiguredFeature<?, ?>>, ? extends FC> config) {
+    public static <FC extends FeatureConfiguration, F extends Feature<FC>> ResourceKey<ConfiguredFeature<?, ?>> createConfiguredFeature(String id, Supplier<? extends F> feature, Function<BootstrapContext<ConfiguredFeature<?, ?>>, ? extends FC> config) {
         ResourceLocation bygID = Constants.createLocation(id);
 
         ResourceKey<ConfiguredFeature<?, ?>> configuredFeatureResourceKey = ResourceKey.create(Registries.CONFIGURED_FEATURE, bygID);
@@ -105,6 +105,6 @@ public class TYGConfiguredFeatures {
 
     @FunctionalInterface
     public interface ConfiguredFeatureFactory {
-        ConfiguredFeature<?, ?> generate(BootstapContext<ConfiguredFeature<?, ?>> configuredFeatureHolderGetter);
+        ConfiguredFeature<?, ?> generate(BootstrapContext<ConfiguredFeature<?, ?>> configuredFeatureHolderGetter);
     }
 }

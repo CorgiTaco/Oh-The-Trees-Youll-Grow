@@ -39,14 +39,6 @@ loom {
 
         mixinConfig("ohthetreesyoullgrow.mixins.json")
     }
-
-    // Forge Datagen Gradle config.  Remove if not using Forge datagen
-    runs.create("datagen") {
-        data()
-        programArgs("--all", "--mod", "ohthetreesyoullgrow")
-        programArgs("--output", project(":common").file("src/main/generated/resources").absolutePath)
-        programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
-    }
 }
 
 dependencies {
@@ -66,8 +58,7 @@ tasks {
     }
 
     shadowJar {
-        exclude("architectury.common.json", ".cache/**",
-            "dev/corgitaco/ohthetreesyoullgrow/forge/data/**")
+        exclude("architectury.common.json", ".cache/**")
         configurations = listOf(project.configurations.getByName("shadowBundle"))
         archiveClassifier.set("dev-shadow")
     }

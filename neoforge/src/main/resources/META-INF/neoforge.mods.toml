@@ -1,0 +1,32 @@
+modLoader = "javafml"
+loaderVersion = "[2,)"
+issueTrackerURL = "https://github.com/CorgiTaco/Oh-The-Trees-Youll-Grow/issues"
+license = "LGPLv3"
+
+[[mods]]
+modId = "ohthetreesyoullgrow"
+version = "${version}"
+displayName = "Oh The Trees You'll Grow"
+authors = "Corgi Taco"
+credits = "Joseph T. McQuigg (JT122406)"
+description = '''
+A Minecraft library that aims to give users incredible configurability by allowing the creation of trees with Minecraft's structure template `.nbt` files.
+'''
+logoFile = "logo.png"
+
+[[dependencies.ohthetreesyoullgrow]]
+modId = "neoforge"
+type = "required"
+versionRange = "[20.6,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.ohthetreesyoullgrow]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.20.6]"
+ordering = "NONE"
+side = "BOTH"
+
+[[mixins]]
+config = "ohthetreesyoullgrow.mixins.json"

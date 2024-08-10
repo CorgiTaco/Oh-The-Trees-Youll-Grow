@@ -1,6 +1,7 @@
 package dev.corgitaco.ohthetreesyoullgrow.world.level.levelgen.feature.configurations.treedecorators;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class TYGTrunkVineDecorator extends TreeDecorator {
 
-    public static final Codec<TYGTrunkVineDecorator> CODEC = RecordCodecBuilder.create(builder ->
+    public static final MapCodec<TYGTrunkVineDecorator> CODEC = RecordCodecBuilder.mapCodec(builder ->
             builder.group(
                     BuiltInRegistries.BLOCK.byNameCodec().flatXmap(TYGLeavesVineDecorator.mustExtendVineBlock(), TYGLeavesVineDecorator.mustExtendVineBlock()).fieldOf("vine_block").forGetter(bygLeavesVineDecorator -> bygLeavesVineDecorator.vineBlock),
                     Codec.FLOAT.fieldOf("probability").forGetter(bygLeavesVineDecorator -> bygLeavesVineDecorator.probability)

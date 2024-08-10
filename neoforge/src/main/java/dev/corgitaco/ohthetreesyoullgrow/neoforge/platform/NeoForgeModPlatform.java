@@ -10,13 +10,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.Event;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoader;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.nio.file.Path;
@@ -54,7 +52,7 @@ public class NeoForgeModPlatform implements ModPlatform {
 
     @Override
     public boolean hasLoadErrors() {
-        return !ModLoader.isLoadingStateValid();
+        return ModLoader.hasErrors();
     }
 
     @Override
@@ -64,7 +62,7 @@ public class NeoForgeModPlatform implements ModPlatform {
 
     @Override
     public String tagNameSpace() {
-        return "forge";
+        return "c";
     }
 
     @Override
@@ -74,7 +72,7 @@ public class NeoForgeModPlatform implements ModPlatform {
 
     @Override
     public boolean canTreeGrowWithEvent(Level level, RandomSource source, BlockPos pos) {
-        return EventHooks.blockGrowFeature(level, source, pos, null).getResult().equals(Event.Result.DENY);
+        return false;
     }
 
     public static final Map<ResourceKey<?>, DeferredRegister> CACHED = new Reference2ObjectOpenHashMap<>();

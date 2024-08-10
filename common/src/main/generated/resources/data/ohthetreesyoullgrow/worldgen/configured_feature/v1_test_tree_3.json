@@ -12,10 +12,8 @@
     "canopy_location": "ohthetreesyoullgrow:features/trees/testv1/test_tree_canopy1",
     "height": {
       "type": "minecraft:uniform",
-      "value": {
-        "max_inclusive": 25,
-        "min_inclusive": 20
-      }
+      "max_inclusive": 25,
+      "min_inclusive": 20
     },
     "leaves_provider": {
       "type": "minecraft:simple_state_provider",

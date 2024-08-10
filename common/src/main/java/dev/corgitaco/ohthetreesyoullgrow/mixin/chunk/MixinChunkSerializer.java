@@ -3,10 +3,7 @@ package dev.corgitaco.ohthetreesyoullgrow.mixin.chunk;
 import dev.corgitaco.ohthetreesyoullgrow.Constants;
 import dev.corgitaco.ohthetreesyoullgrow.world.level.chunk.RandomTickScheduler;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.level.ChunkPos;
@@ -49,7 +46,8 @@ public class MixinChunkSerializer {
             CompoundTag corgiLibTag = tag.getCompound(Constants.MOD_ID);
             if (corgiLibTag.contains("scheduled_random_ticks", Tag.TAG_LIST)) {
                 for (Tag scheduledTick : tag.getList("scheduled_random_ticks", Tag.TAG_COMPOUND)) {
-                    ((RandomTickScheduler) cir.getReturnValue()).getScheduledRandomTicks().add(NbtUtils.readBlockPos((CompoundTag) scheduledTick));
+                    int[] intArrayTag = ((IntArrayTag) scheduledTick).getAsIntArray();
+                    ((RandomTickScheduler) cir.getReturnValue()).getScheduledRandomTicks().add(new BlockPos(intArrayTag[0], intArrayTag[1], intArrayTag[2]));
                 }
             }
         }

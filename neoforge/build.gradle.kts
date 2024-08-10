@@ -32,6 +32,13 @@ configurations {
 
 loom {
     accessWidenerPath.set(project(":common").loom.accessWidenerPath)
+
+    runs.create("datagen") {
+        data()
+        programArgs("--all", "--mod", "ohthetreesyoullgrow")
+        programArgs("--output", project(":common").file("src/main/generated/resources").absolutePath)
+        programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
+    }
 }
 
 dependencies {
@@ -45,7 +52,7 @@ tasks {
     processResources {
         inputs.property("version", project.version)
 
-        filesMatching("META-INF/mods.toml") {
+        filesMatching("META-INF/neoforge.mods.toml") {
             expand(mapOf("version" to project.version))
         }
     }
