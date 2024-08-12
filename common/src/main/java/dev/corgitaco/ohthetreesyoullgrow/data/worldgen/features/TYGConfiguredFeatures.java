@@ -62,8 +62,7 @@ public class TYGConfiguredFeatures {
                 BlockStateProvider.simple(Blocks.DIAMOND_BLOCK),
                 BlockStateProvider.simple(Blocks.EMERALD_BLOCK),
                 Blocks.OAK_LOG, Blocks.OAK_LEAVES, BlockTags.DIRT,
-                3,
-                List.of()
+                3
         );
     });
 
@@ -75,8 +74,7 @@ public class TYGConfiguredFeatures {
                 BlockStateProvider.simple(Blocks.MUSHROOM_STEM),
                 BlockStateProvider.simple(Blocks.RED_MUSHROOM_BLOCK),
                 Blocks.MUSHROOM_STEM, Blocks.RED_MUSHROOM_BLOCK, BlockTags.MUSHROOM_GROW_BLOCK,
-                3,
-                List.of()
+                3
         );
     });
 
@@ -88,8 +86,7 @@ public class TYGConfiguredFeatures {
                 BlockStateProvider.simple(Blocks.MUSHROOM_STEM),
                 BlockStateProvider.simple(Blocks.BROWN_MUSHROOM_BLOCK),
                 Blocks.MUSHROOM_STEM, Blocks.RED_MUSHROOM_BLOCK, BlockTags.MUSHROOM_GROW_BLOCK,
-                3,
-                List.of()
+                3
         );
     });
 
