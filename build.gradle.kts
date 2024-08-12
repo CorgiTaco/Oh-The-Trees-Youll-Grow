@@ -13,7 +13,7 @@ val minecraftVersion = project.properties["minecraft_version"] as String
 architectury.minecraft = minecraftVersion
 
 allprojects {
-    version = project.properties["version"] as String
+    version = "${minecraftVersion}-${project.properties["version"]}"
     group = project.properties["group"] as String
 }
 
@@ -22,7 +22,7 @@ subprojects {
     apply(plugin = "architectury-plugin")
     apply(plugin = "maven-publish")
 
-    base.archivesName.set(project.properties["archives_base_name"] as String + "-${project.name}-$minecraftVersion")
+    base.archivesName.set(project.properties["archives_base_name"] as String + "-${project.name}")
 
     val loom = project.extensions.getByName<LoomGradleExtensionAPI>("loom")
     loom.silentMojangMappingsLicense()
