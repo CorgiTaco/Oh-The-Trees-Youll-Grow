@@ -17,15 +17,15 @@ A Minecraft library that aims to give users incredible configurability by allowi
 
 [[dependencies.ohthetreesyoullgrow]] #optional
 modId = "neoforge" #mandatory
-mandatory = true #mandatory
-versionRange = "[20.2,)" #mandatory
+type = "required" #mandatory
+versionRange = "[20.4,)" #mandatory
 ordering = "NONE" # The order that this dependency should load in relation to your mod, required to be either 'BEFORE' or 'AFTER' if the dependency is not mandatory
 side = "BOTH" # Side this dependency is applied on - 'BOTH', 'CLIENT' or 'SERVER'
 
 [[dependencies.ohthetreesyoullgrow]]
 modId = "minecraft"
-mandatory = true
-versionRange = "[1.20.2]"
+type = "required"
+versionRange = "[1.20.4]"
 ordering = "NONE"
 side = "BOTH"
 

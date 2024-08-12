@@ -1,3 +1,6 @@
+# 3.0.0
+* Update to 1.20.4
+
 # 2.0.0
 * Update to 1.20.2
 * Add NeoForge Support

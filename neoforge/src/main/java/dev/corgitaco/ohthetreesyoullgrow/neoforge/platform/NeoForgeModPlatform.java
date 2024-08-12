@@ -39,7 +39,7 @@ public class NeoForgeModPlatform implements ModPlatform {
 
     @Override
     public String curseForgeURL() {
-        return "";
+        return "https://www.curseforge.com/minecraft/mc-mods/oh-the-trees-youll-grow";
     }
 
     @Override
