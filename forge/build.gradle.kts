@@ -37,6 +37,7 @@ loom {
         convertAccessWideners.set(true)
         extraAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
 
+        useCustomMixin.set(false)
         mixinConfig("ohthetreesyoullgrow.mixins.json")
     }
 }

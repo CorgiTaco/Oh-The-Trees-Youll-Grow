@@ -10,6 +10,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ProtoChunk;
 import net.minecraft.world.level.chunk.storage.ChunkSerializer;
+import net.minecraft.world.level.chunk.storage.RegionStorageInfo;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -41,7 +42,7 @@ public class MixinChunkSerializer {
 
 
     @Inject(method = "read", at = @At("RETURN"))
-    private static void readScheduledRandomTicks(ServerLevel serverLevel, PoiManager poiManager, ChunkPos pos, CompoundTag tag, CallbackInfoReturnable<ProtoChunk> cir) {
+    private static void readScheduledRandomTicks(ServerLevel level, PoiManager poiManager, RegionStorageInfo regionStorageInfo, ChunkPos pos, CompoundTag tag, CallbackInfoReturnable<ProtoChunk> cir) {
         if (tag.contains(Constants.MOD_ID)) {
             CompoundTag corgiLibTag = tag.getCompound(Constants.MOD_ID);
             if (corgiLibTag.contains("scheduled_random_ticks", Tag.TAG_LIST)) {

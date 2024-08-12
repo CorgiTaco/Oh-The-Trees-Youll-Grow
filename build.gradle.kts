@@ -43,7 +43,7 @@ subprojects {
         "minecraft"("com.mojang:minecraft:$minecraftVersion")
         "mappings"(loom.layered{
             officialMojangMappings()
-            parchment("org.parchmentmc.data:parchment-$minecraftVersion:${project.properties["parchment"]}@zip")
+            parchment("org.parchmentmc.data:parchment-1.21:${project.properties["parchment"]}@zip")
         })
 
         compileOnly("org.jetbrains:annotations:24.1.0")
