@@ -57,6 +57,7 @@ public interface ModPlatform {
 
     enum Platform {
         FORGE,
-        FABRIC
+        FABRIC,
+        NEOFORGE
     }
 }

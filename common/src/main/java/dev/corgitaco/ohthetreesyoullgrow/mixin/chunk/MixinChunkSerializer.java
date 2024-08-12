@@ -45,16 +45,6 @@ public class MixinChunkSerializer {
 
     @Inject(method = "read", at = @At("RETURN"))
     private static void readScheduledRandomTicks(ServerLevel serverLevel, PoiManager poiManager, ChunkPos pos, CompoundTag tag, CallbackInfoReturnable<ProtoChunk> cir) {
-        // Legacy Support
-        if (tag.contains("corgilib")) {
-            CompoundTag corgiLibTag = tag.getCompound("corgilib");
-            if (corgiLibTag.contains("scheduled_random_ticks", Tag.TAG_LIST)) {
-                for (Tag scheduledTick : tag.getList("scheduled_random_ticks", Tag.TAG_COMPOUND)) {
-                    ((RandomTickScheduler) cir.getReturnValue()).getScheduledRandomTicks().add(NbtUtils.readBlockPos((CompoundTag) scheduledTick));
-                }
-            }
-        }
-
         if (tag.contains(Constants.MOD_ID)) {
             CompoundTag corgiLibTag = tag.getCompound(Constants.MOD_ID);
             if (corgiLibTag.contains("scheduled_random_ticks", Tag.TAG_LIST)) {

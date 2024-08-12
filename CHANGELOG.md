@@ -1,3 +1,8 @@
+# 2.0.0
+* Update to 1.20.2
+* Add NeoForge Support
+* Remove CorgiLib Legacy Support
+
 # 1.3.0
 * Rewrite Build Script
 * Generalize Registration

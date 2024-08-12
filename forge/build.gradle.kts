@@ -50,10 +50,7 @@ loom {
 }
 
 dependencies {
-    if ((project.properties["use_neoforge"] as String).toBoolean())
-        forge("net.neoforged:forge:$minecraftVersion-${project.properties["neoforge_version"]}")
-    else forge("net.minecraftforge:forge:$minecraftVersion-${project.properties["forge_version"]}")
-
+    forge("net.minecraftforge:forge:$minecraftVersion-${project.properties["forge_version"]}")
 
     "common"(project(":common", "namedElements")) { isTransitive = false }
     "shadowBundle"(project(":common", "transformProductionForge"))
@@ -97,9 +94,9 @@ publisher {
     changelog.set(projectDir.toPath().parent.resolve("CHANGELOG.md").toFile().readText())
     artifact.set(tasks.remapJar)
     setGameVersions(minecraftVersion)
-    setLoaders(ModLoader.FORGE, ModLoader.NEOFORGE)
+    setLoaders(ModLoader.FORGE)
     setCurseEnvironment(CurseEnvironment.SERVER)
-    setJavaVersions(JavaVersion.VERSION_17, JavaVersion.VERSION_18, JavaVersion.VERSION_19, JavaVersion.VERSION_20, JavaVersion.VERSION_21)
+    setJavaVersions(JavaVersion.VERSION_17, JavaVersion.VERSION_18, JavaVersion.VERSION_19, JavaVersion.VERSION_20, JavaVersion.VERSION_21, JavaVersion.VERSION_22)
 }
 
 private fun getPublishingCredentials(): Pair<String?, String?> {

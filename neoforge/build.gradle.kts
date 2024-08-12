@@ -9,7 +9,7 @@ plugins {
 
 architectury {
     platformSetupLoomIde()
-    fabric()
+    neoForge()
 }
 
 val minecraftVersion = project.properties["minecraft_version"] as String
@@ -23,40 +23,40 @@ configurations {
     create("shadowBundle")
     compileClasspath.get().extendsFrom(configurations["common"])
     runtimeClasspath.get().extendsFrom(configurations["common"])
-    getByName("developmentFabric").extendsFrom(configurations["common"])
+    getByName("developmentNeoForge").extendsFrom(configurations["common"])
     "shadowBundle" {
         isCanBeResolved = true
         isCanBeConsumed = false
     }
 }
 
-loom.accessWidenerPath.set(project(":common").loom.accessWidenerPath)
+loom {
+    accessWidenerPath.set(project(":common").loom.accessWidenerPath)
+}
 
 dependencies {
-    modImplementation("net.fabricmc:fabric-loader:${project.properties["fabric_loader_version"]}")
-    modApi("net.fabricmc.fabric-api:fabric-api:${project.properties["fabric_api_version"]}+$minecraftVersion")
+    neoForge("net.neoforged:neoforge:${project.properties["neoforge_version"]}")
 
     "common"(project(":common", "namedElements")) { isTransitive = false }
-    "shadowBundle"(project(":common", "transformProductionFabric"))
+    "shadowBundle"(project(":common", "transformProductionNeoForge"))
 }
 
 tasks {
     processResources {
         inputs.property("version", project.version)
 
-        filesMatching("fabric.mod.json") {
+        filesMatching("META-INF/mods.toml") {
             expand(mapOf("version" to project.version))
         }
     }
 
     shadowJar {
-        exclude("architectury.common.json")
+        exclude("architectury.common.json", ".cache/**")
         configurations = listOf(project.configurations.getByName("shadowBundle"))
         archiveClassifier.set("dev-shadow")
     }
 
     remapJar {
-        injectAccessWidener.set(true)
         inputFile.set(shadowJar.get().archiveFile)
         dependsOn(shadowJar)
     }
@@ -73,17 +73,14 @@ publisher {
     modrinthID.set(project.properties["modrinth_id"].toString())
     githubRepo.set("https://github.com/CorgiTaco/Oh-The-Trees-Youll-Grow")
     setReleaseType(ReleaseType.RELEASE)
-    projectVersion.set("${project.version}-fabric")
-    displayName.set("${project.properties["mod_name"]}-fabric-${project.version}")
+    projectVersion.set("${project.version}-neoforge")
+    displayName.set("${project.properties["mod_name"]}-neoforge-${project.version}")
     changelog.set(projectDir.toPath().parent.resolve("CHANGELOG.md").toFile().readText())
     artifact.set(tasks.remapJar)
     setGameVersions(minecraftVersion)
-    setLoaders(ModLoader.FABRIC, ModLoader.QUILT)
+    setLoaders(ModLoader.NEOFORGE)
     setCurseEnvironment(CurseEnvironment.SERVER)
     setJavaVersions(JavaVersion.VERSION_17, JavaVersion.VERSION_18, JavaVersion.VERSION_19, JavaVersion.VERSION_20, JavaVersion.VERSION_21, JavaVersion.VERSION_22)
-    val depends = mutableListOf("fabric-api")
-    curseDepends.required.set(depends)
-    modrinthDepends.required.set(depends)
 }
 
 private fun getPublishingCredentials(): Pair<String?, String?> {
