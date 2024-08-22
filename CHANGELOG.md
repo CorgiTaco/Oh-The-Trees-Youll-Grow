@@ -1,3 +1,6 @@
+# 5.0.1
+* Add check to prevent logs from being placed where bedrock is present
+* 
 # 5.0.0
 * Update to 1.21.1
 
