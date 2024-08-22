@@ -211,7 +211,7 @@ public class TreeFromStructureNBTFeature extends Feature<TreeFromStructureNBTCon
             BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos().set(pos);
 
             for (int i = 0; i < maxTrunkBuildingDepth; i++) {
-                if (!groundFilter.test(level, mutableBlockPos)) {
+                if (!groundFilter.test(level, mutableBlockPos) && !level.getBlockState(mutableBlockPos).is(Blocks.BEDROCK)) {
                     if (level instanceof Level) { // Drop the replaced block.
                         level.removeBlock(mutableBlockPos, true);
                     }

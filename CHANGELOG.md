@@ -1,3 +1,6 @@
+# 1.3.1
+* Add check to prevent logs from being placed where bedrock is present
+
 # 1.3.0
 * Rewrite Build Script
 * Generalize Registration
