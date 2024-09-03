@@ -9,8 +9,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod(Constants.MOD_ID)
 public class OhTheTreesYoullGrowForge {
 
-    public OhTheTreesYoullGrowForge() {
+    public OhTheTreesYoullGrowForge(final FMLJavaModLoadingContext context) {
         CommonClass.init();
-        ForgeModPlatform.CACHED.values().forEach(deferredRegister -> deferredRegister.register(FMLJavaModLoadingContext.get().getModEventBus()));
+        ForgeModPlatform.CACHED.values().forEach(deferredRegister -> deferredRegister.register(context.getModEventBus()));
     }
 }

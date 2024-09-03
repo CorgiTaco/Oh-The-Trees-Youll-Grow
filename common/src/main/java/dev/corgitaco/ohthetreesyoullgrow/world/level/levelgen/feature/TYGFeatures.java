@@ -9,7 +9,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import java.util.function.Supplier;
 
 public class TYGFeatures {
-    public static Supplier<Feature<TreeFromStructureNBTConfig>> TREE_FROM_NBT_V1 = ModPlatform.INSTANCE.register(BuiltInRegistries.FEATURE, "tree_from_nbt_v1", () -> new TreeFromStructureNBTFeature(TreeFromStructureNBTConfig.CODEC.stable()));
+    public static final Supplier<Feature<TreeFromStructureNBTConfig>> TREE_FROM_NBT_V1 = ModPlatform.INSTANCE.register(BuiltInRegistries.FEATURE, "tree_from_nbt_v1", () -> new TreeFromStructureNBTFeature(TreeFromStructureNBTConfig.CODEC.stable()));
 
     public static void register() {}
 }

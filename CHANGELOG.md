@@ -1,3 +1,8 @@
+# 5.0.2
+* Fix NeoForge Jar Missing AccessTransformer
+* Make TREEFROMSTRUCTURENBT final
+* Fix Deprecation of FMLJavaModLoadingContext.get in forge
+
 # 5.0.1
 * Add check to prevent logs from being placed where bedrock is present
 
