@@ -32,7 +32,6 @@ configurations {
 
 loom {
     accessWidenerPath.set(project(":common").loom.accessWidenerPath)
-
     runs.create("datagen") {
         data()
         programArgs("--all", "--mod", "ohthetreesyoullgrow")
@@ -66,6 +65,7 @@ tasks {
     remapJar {
         inputFile.set(shadowJar.get().archiveFile)
         dependsOn(shadowJar)
+        atAccessWideners.add("ohthetreesyoullgrow.accesswidener")
     }
 }
 
