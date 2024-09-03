@@ -28,6 +28,9 @@ configurations {
         isCanBeResolved = true
         isCanBeConsumed = false
     }
+    configureEach {
+        resolutionStrategy.force("net.sf.jopt-simple:jopt-simple:5.0.4")
+    }
 }
 
 loom {
