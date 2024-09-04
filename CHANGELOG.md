@@ -1,8 +1,7 @@
-# 1.3.2
-* Fix canopy log builders piercing terrain.
-
 # 1.3.1
 * Add check to prevent logs from being placed where bedrock is present
+* Fix TREE_FROM_NBT_V1 not being final
+* Fix canopy log builders piercing terrain.
 
 # 1.3.0
 * Rewrite Build Script
