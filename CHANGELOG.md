@@ -1,3 +1,6 @@
+# 5.0.3
+* Fix canopy log builders piercing terrain
+
 # 5.0.2
 * Fix NeoForge Jar Missing AccessTransformer
 * Make TREEFROMSTRUCTURENBT final
