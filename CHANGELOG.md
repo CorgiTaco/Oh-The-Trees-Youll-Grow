@@ -1,3 +1,6 @@
+# 1.3.2
+* Fix canopy log builders piercing terrain.
+
 # 1.3.1
 * Add check to prevent logs from being placed where bedrock is present
 
