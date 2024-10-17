@@ -3,7 +3,7 @@ import com.hypherionmc.modpublisher.properties.ModLoader
 import com.hypherionmc.modpublisher.properties.ReleaseType
 
 plugins {
-    id("com.github.johnrengelman.shadow")
+    id("com.gradleup.shadow")
     id("com.hypherionmc.modutils.modpublisher") version "2.+"
 }
 
@@ -57,7 +57,7 @@ tasks {
     }
 
     shadowJar {
-        exclude("architectury.common.json", ".cache/**")
+        exclude("architectury.common.json", ".cache/**", "dev/corgitaco/ohthetreesyoullgrow/neoforge/data/**")
         configurations = listOf(project.configurations.getByName("shadowBundle"))
         archiveClassifier.set("dev-shadow")
     }
