@@ -42,7 +42,7 @@ public record TreeFromStructureNBTConfigV2(Identifier baseLocation, Identifier c
                     BuiltInRegistries.BLOCK.byNameCodec().listOf().fieldOf("leaves_target").forGetter(TreeFromStructureNBTConfigV2::leavesTarget),
                     BlockPredicate.CODEC.fieldOf("can_grow_on_filter").forGetter(TreeFromStructureNBTConfigV2::growableOn),
                     BlockPredicate.CODEC.fieldOf("can_leaves_place_filter").forGetter(TreeFromStructureNBTConfigV2::leavesPlacementFilter),
-                    BlockPredicate.CODEC.optionalFieldOf("can_logs_place_filter", BlockPredicate.replaceable()).forGetter(TreeFromStructureNBTConfigV2::logsPlacementFilter),
+                    BlockPredicate.CODEC.optionalFieldOf("can_logs_place_filter", BlockPredicate.alwaysTrue()).forGetter(TreeFromStructureNBTConfigV2::logsPlacementFilter),
                     TreeLogFilterBehavior.CODEC.optionalFieldOf("tree_filter_behavior", TreeLogFilterBehavior.BLOCK).forGetter(TreeFromStructureNBTConfigV2::treeLogFilterBehavior),
                     Codec.INT.optionalFieldOf("max_log_depth", 5).forGetter(TreeFromStructureNBTConfigV2::maxLogDepth),
                     TreeDecorator.CODEC.listOf().optionalFieldOf("decorators", new ArrayList<>()).forGetter(TreeFromStructureNBTConfigV2::treeDecorators),
