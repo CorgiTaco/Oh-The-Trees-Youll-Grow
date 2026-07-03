@@ -22,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mixin(SerializableChunkData.class)
 public class MixinChunkSerializer {
@@ -53,11 +54,17 @@ public class MixinChunkSerializer {
     private void readScheduledRandomTicks(ServerLevel level, PoiManager poiManager, RegionStorageInfo regionInfo, ChunkPos pos, CallbackInfoReturnable<ProtoChunk> cir) {
         CompoundTag tag = this.structureData;
         if (tag.contains(Constants.MOD_ID)) {
-            CompoundTag corgiLibTag = tag.getCompound(Constants.MOD_ID).orElseThrow();
-            if (corgiLibTag.contains("scheduled_random_ticks")) {
-                for (Tag scheduledTick : tag.getList("scheduled_random_ticks").orElseThrow()) {
-                    int[] intArrayTag = ((IntArrayTag) scheduledTick).getAsIntArray();
-                    ((RandomTickScheduler) cir.getReturnValue()).getScheduledRandomTicks().add(new BlockPos(intArrayTag[0], intArrayTag[1], intArrayTag[2]));
+            Optional<CompoundTag> corgiLibTagOptional = tag.getCompound(Constants.MOD_ID);
+            if (corgiLibTagOptional.isPresent()) {
+                CompoundTag corgiLibTag = corgiLibTagOptional.get();
+                if (corgiLibTag.contains("scheduled_random_ticks")) {
+                    Optional<ListTag> listTagOptional = corgiLibTag.getList("scheduled_random_ticks");
+                    if (listTagOptional.isPresent()) {
+                        for (Tag scheduledTick : listTagOptional.get()) {
+                            int[] intArrayTag = ((IntArrayTag) scheduledTick).getAsIntArray();
+                            ((RandomTickScheduler) cir.getReturnValue()).getScheduledRandomTicks().add(new BlockPos(intArrayTag[0], intArrayTag[1], intArrayTag[2]));
+                        }
+                    }
                 }
             }
         }
