@@ -1,7 +1,6 @@
 package dev.corgitaco.ohthetreesyoullgrow.mixin;
 
 import dev.corgitaco.ohthetreesyoullgrow.world.level.chunk.RandomTickScheduler;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
@@ -18,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(ServerLevel.class)

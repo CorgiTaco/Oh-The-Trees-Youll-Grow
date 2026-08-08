@@ -1,10 +1,10 @@
 {
   "type": "ohthetreesyoullgrow:tree_from_nbt_v1",
   "config": {
-    "base_location": "ohthetreesyoullgrow:features/mushrooms/testv1/test_mushroom_trunk1",
+    "base_location": "ohthetreesyoullgrow:features/trees/testv1/test_tree_trunk1",
     "can_grow_on_filter": {
       "type": "minecraft:matching_block_tag",
-      "tag": "minecraft:mushroom_grow_block"
+      "tag": "minecraft:dirt"
     },
     "can_leaves_place_filter": {
       "type": "minecraft:replaceable"
@@ -12,7 +12,18 @@
     "can_logs_place_filter": {
       "type": "minecraft:replaceable"
     },
-    "canopy_location": "ohthetreesyoullgrow:features/mushrooms/testv1/test_mushroom_canopy1",
+    "canopy_location": "ohthetreesyoullgrow:features/trees/testv1/test_tree_canopy1",
+    "decorators": [
+      {
+        "type": "minecraft:alter_ground",
+        "provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:moss_block"
+          }
+        }
+      }
+    ],
     "height": {
       "type": "minecraft:uniform",
       "max_inclusive": 10,
@@ -21,38 +32,31 @@
     "leaves_provider": {
       "type": "minecraft:simple_state_provider",
       "state": {
-        "Name": "minecraft:red_mushroom_block",
+        "Name": "minecraft:acacia_leaves",
         "Properties": {
-          "down": "true",
-          "east": "true",
-          "north": "true",
-          "south": "true",
-          "up": "true",
-          "west": "true"
+          "distance": "7",
+          "persistent": "false",
+          "waterlogged": "false"
         }
       }
     },
     "leaves_target": [
-      "minecraft:red_mushroom_block"
+      "minecraft:oak_leaves"
     ],
     "log_provider": {
       "type": "minecraft:simple_state_provider",
       "state": {
-        "Name": "minecraft:mushroom_stem",
+        "Name": "minecraft:acacia_log",
         "Properties": {
-          "down": "true",
-          "east": "true",
-          "north": "true",
-          "south": "true",
-          "up": "true",
-          "west": "true"
+          "axis": "y"
         }
       }
     },
     "log_target": [
-      "minecraft:mushroom_stem"
+      "minecraft:oak_log"
     ],
     "max_log_depth": 3,
+    "orientation": "UPSIDE_DOWN",
     "place_from_nbt": []
   }
 }
