@@ -3,12 +3,12 @@ pluginManagement.repositories {
     maven("https://maven.architectury.dev/")
     maven("https://maven.minecraftforge.net/")
     maven("https://maven.neoforged.net/releases/")
-    maven("https://maven.firstdark.dev/releases")
+    maven("https://maven.firstdarkdev.xyz/releases")
     gradlePluginPortal()
 }
 
 plugins {
-    id("com.gradle.develocity") version("4.2.2")
+    id("com.gradle.develocity") version("4.5.0")
 }
 
 develocity.buildScan {
