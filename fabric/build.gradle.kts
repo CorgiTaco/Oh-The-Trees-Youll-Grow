@@ -12,7 +12,7 @@ architectury {
     fabric()
 }
 
-val minecraftVersion = project.properties["minecraft_version"] as String
+val minecraftVersion = providers.gradleProperty("minecraft_version").get()
 
 configurations {
     create("common")
@@ -33,8 +33,8 @@ configurations {
 loom.accessWidenerPath.set(project(":common").loom.accessWidenerPath)
 
 dependencies {
-    modImplementation("net.fabricmc:fabric-loader:${project.properties["fabric_loader_version"]}")
-    modApi("net.fabricmc.fabric-api:fabric-api:${project.properties["fabric_api_version"]}+$minecraftVersion")
+    modImplementation("net.fabricmc:fabric-loader:${providers.gradleProperty("fabric_loader_version").get()}")
+    modApi("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}+$minecraftVersion")
 
     "common"(project(":common", "namedElements")) { isTransitive = false }
     "shadowBundle"(project(":common", "transformProductionFabric"))
@@ -66,21 +66,21 @@ publisher {
     apiKeys {
         curseforge(getPublishingCredentials().first)
         modrinth(getPublishingCredentials().second)
-        github(project.properties["github_token"].toString())
+        github(providers.gradleProperty("github_token").orNull)
     }
 
-    curseID.set(project.properties["curseforge_id"].toString())
-    modrinthID.set(project.properties["modrinth_id"].toString())
+    curseID.set(providers.gradleProperty("curseforge_id").get())
+    modrinthID.set(providers.gradleProperty("modrinth_id").get())
     githubRepo.set("https://github.com/CorgiTaco/Oh-The-Trees-Youll-Grow")
     setReleaseType(ReleaseType.RELEASE)
     projectVersion.set("$minecraftVersion-${project.version}-Fabric")
-    displayName.set("${project.properties["mod_name"]}-Fabric-$minecraftVersion-${project.version}")
+    displayName.set("${providers.gradleProperty("mod_name").get()}-Fabric-$minecraftVersion-${project.version}")
     changelog.set(projectDir.toPath().parent.resolve("CHANGELOG.md").toFile().readText())
     artifact.set(tasks.remapJar)
     setGameVersions(minecraftVersion)
     setLoaders(ModLoader.FABRIC, ModLoader.QUILT)
     setCurseEnvironment(CurseEnvironment.SERVER)
-    setJavaVersions(JavaVersion.VERSION_21, JavaVersion.VERSION_22)
+    setJavaVersions(JavaVersion.VERSION_21, JavaVersion.VERSION_22, JavaVersion.VERSION_25)
     val depends = mutableListOf("fabric-api")
     curseDepends.required.set(depends)
     modrinthDepends.required.set(depends)

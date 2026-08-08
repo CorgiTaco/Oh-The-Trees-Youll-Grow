@@ -66,6 +66,8 @@ public class AttachedToLogsDecorator extends TreeDecorator {
 
                 if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
                     state = state.setValue(BlockStateProperties.HORIZONTAL_FACING, direction);
+                } else if (state.hasProperty(BlockStateProperties.FACING)) {
+                    state = state.setValue(BlockStateProperties.FACING, direction);
                 }
                 pContext.setBlock(relative, state);
             }

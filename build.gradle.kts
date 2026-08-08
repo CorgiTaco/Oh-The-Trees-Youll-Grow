@@ -1,28 +1,27 @@
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
 
 plugins {
-    id("architectury-plugin") version "3.4-SNAPSHOT"
-    id("dev.architectury.loom") version "1.10-SNAPSHOT" apply false
-    id("com.gradleup.shadow") version "8.3.6" apply false
+    id("architectury-plugin") version "3.5-SNAPSHOT"
+    id("dev.architectury.loom") version "1.17-SNAPSHOT" apply false
+    id("com.gradleup.shadow") version "9.6.1" apply false
     java
-    idea
     `maven-publish`
 }
 
-val minecraftVersion = project.properties["minecraft_version"] as String
+val minecraftVersion = providers.gradleProperty("minecraft_version").get()
 architectury.minecraft = minecraftVersion
 
 allprojects {
-    version = project.properties["version"] as String
-    group = project.properties["group"] as String
+    version = providers.gradleProperty("version").get()
+    group = providers.gradleProperty("group").get()
 }
 
 subprojects {
-    apply(plugin = "dev.architectury.loom")
-    apply(plugin = "architectury-plugin")
-    apply(plugin = "maven-publish")
+    pluginManager.apply("dev.architectury.loom")
+    pluginManager.apply("architectury-plugin")
+    pluginManager.apply("maven-publish")
 
-    base.archivesName.set(project.properties["archives_base_name"] as String + "-${project.name}-$minecraftVersion")
+    base.archivesName.set(providers.gradleProperty("archives_base_name").get() + "-${project.name}-$minecraftVersion")
 
     val loom = project.extensions.getByName<LoomGradleExtensionAPI>("loom")
     loom.silentMojangMappingsLicense()
@@ -43,10 +42,10 @@ subprojects {
         "minecraft"("com.mojang:minecraft:$minecraftVersion")
         "mappings"(loom.layered{
             officialMojangMappings()
-            parchment("org.parchmentmc.data:parchment-$minecraftVersion:${project.properties["parchment"]}@zip")
+            parchment("org.parchmentmc.data:parchment-$minecraftVersion:${providers.gradleProperty("parchment").get()}@zip")
         })
 
-        compileOnly("org.jetbrains:annotations:26.0.2")
+        compileOnly("org.jetbrains:annotations:26.1.0")
         compileOnly("com.google.auto.service:auto-service:1.1.1")
         annotationProcessor("com.google.auto.service:auto-service:1.1.1")
     }
@@ -64,8 +63,8 @@ subprojects {
 
     publishing {
         publications.create<MavenPublication>("mavenJava") {
-            artifactId = project.properties["archives_base_name"] as String + "-${project.name}"
-            version = minecraftVersion + "-" + project.version.toString()
+            artifactId = providers.gradleProperty("archives_base_name").get() + "-${project.name}"
+            version = minecraftVersion + "-" + providers.gradleProperty("version").get()
             from(components["java"])
         }
 
@@ -77,8 +76,8 @@ subprojects {
                 url = uri(if (project.version.toString().endsWith("SNAPSHOT") || project.version.toString().startsWith("0")) snapshotsRepoUrl else releasesRepoUrl)
                 name = "JTDev-Maven-Repository"
                 credentials {
-                    username = project.properties["repoLogin"]?.toString()
-                    password = project.properties["repoPassword"]?.toString()
+                    username = providers.gradleProperty("repoLogin").orNull
+                    password = providers.gradleProperty("repoPassword").orNull
                 }
             }
         }

@@ -1,3 +1,15 @@
+# 6.1.0
+* Add sideways and upside down tree config choices.
+* Fix canopy and trunk additional block placements.
+* Allow BlockStateProperties.FACING to be used on AttachedToLogsDecorator and still set Direction correctly.
+* Add the ability to use blocks within the NBT to place Blockstates via Blockstate providers.
+* Allow the ability to specify multiple leave targets and multiple leave block state providers.
+* Introduce Tree From Structure NBT v2
+* Fix placing additional blocks from NBT in the v1 feature
+* Fix issue with piercing walls and structures and bedrock
+* Add the ability to define the log filter behavior. Filter options include: PIERCE - Destroy blocks in the filter. PASSTHROUGH - Tree will generate but skip blocks in filter. BLOCK - Tree will not generate if it meets a block in the filter.
+* Add the ability to turn on/off random tree rotation.
+
 # 6.0.8
 * Concurrency safety for random scheduled ticks.
 

@@ -13,7 +13,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.Set;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)
+@EventBusSubscriber(modid = Constants.MOD_ID)
 class TYGDataProvider {
 
     private static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()

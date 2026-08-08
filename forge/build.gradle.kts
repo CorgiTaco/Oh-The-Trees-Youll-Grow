@@ -12,7 +12,7 @@ architectury {
     forge()
 }
 
-val minecraftVersion = project.properties["minecraft_version"] as String
+val minecraftVersion = providers.gradleProperty("minecraft_version").get()
 
 configurations {
     create("common")
@@ -27,9 +27,6 @@ configurations {
     "shadowBundle" {
         isCanBeResolved = true
         isCanBeConsumed = false
-    }
-    configureEach {
-        resolutionStrategy.force("net.sf.jopt-simple:jopt-simple:5.0.4")
     }
 }
 
@@ -46,7 +43,7 @@ loom {
 }
 
 dependencies {
-    forge("net.minecraftforge:forge:$minecraftVersion-${project.properties["forge_version"]}")
+    forge("net.minecraftforge:forge:$minecraftVersion-${providers.gradleProperty("forge_version").get()}")
 
     "common"(project(":common", "namedElements")) { isTransitive = false }
     "shadowBundle"(project(":common", "transformProductionForge"))
@@ -77,21 +74,21 @@ publisher {
     apiKeys {
         curseforge(getPublishingCredentials().first)
         modrinth(getPublishingCredentials().second)
-        github(project.properties["github_token"].toString())
+        github(providers.gradleProperty("github_token").orNull)
     }
 
-    curseID.set(project.properties["curseforge_id"].toString())
-    modrinthID.set(project.properties["modrinth_id"].toString())
+    curseID.set(providers.gradleProperty("curseforge_id").get())
+    modrinthID.set(providers.gradleProperty("modrinth_id").get())
     githubRepo.set("https://github.com/CorgiTaco/Oh-The-Trees-Youll-Grow")
     setReleaseType(ReleaseType.RELEASE)
     projectVersion.set("$minecraftVersion-${project.version}-Forge")
-    displayName.set("${project.properties["mod_name"]}-Forge-$minecraftVersion-${project.version}")
+    displayName.set("${providers.gradleProperty("mod_name").get()}-Forge-$minecraftVersion-${project.version}")
     changelog.set(projectDir.toPath().parent.resolve("CHANGELOG.md").toFile().readText())
     artifact.set(tasks.remapJar)
     setGameVersions(minecraftVersion)
     setLoaders(ModLoader.FORGE)
     setCurseEnvironment(CurseEnvironment.SERVER)
-    setJavaVersions(JavaVersion.VERSION_21, JavaVersion.VERSION_22)
+    setJavaVersions(JavaVersion.VERSION_21, JavaVersion.VERSION_22, JavaVersion.VERSION_25)
 }
 
 private fun getPublishingCredentials(): Pair<String?, String?> {
