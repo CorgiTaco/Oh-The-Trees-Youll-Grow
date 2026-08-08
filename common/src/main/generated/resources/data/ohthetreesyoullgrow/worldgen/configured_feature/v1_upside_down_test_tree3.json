@@ -13,31 +13,15 @@
       "type": "minecraft:replaceable"
     },
     "canopy_location": "ohthetreesyoullgrow:features/trees/testv1/test_tree_canopy1",
-    "decorators": [
-      {
-        "type": "minecraft:alter_ground",
-        "provider": {
-          "type": "minecraft:simple_state_provider",
-          "state": {
-            "Name": "minecraft:moss_block"
-          }
-        }
-      }
-    ],
     "height": {
       "type": "minecraft:uniform",
-      "max_inclusive": 10,
-      "min_inclusive": 5
+      "max_inclusive": 25,
+      "min_inclusive": 20
     },
     "leaves_provider": {
       "type": "minecraft:simple_state_provider",
       "state": {
-        "Name": "minecraft:acacia_leaves",
-        "Properties": {
-          "distance": "7",
-          "persistent": "false",
-          "waterlogged": "false"
-        }
+        "Name": "minecraft:emerald_block"
       }
     },
     "leaves_target": [
@@ -46,16 +30,14 @@
     "log_provider": {
       "type": "minecraft:simple_state_provider",
       "state": {
-        "Name": "minecraft:acacia_log",
-        "Properties": {
-          "axis": "y"
-        }
+        "Name": "minecraft:diamond_block"
       }
     },
     "log_target": [
       "minecraft:oak_log"
     ],
     "max_log_depth": 3,
+    "orientation": "UPSIDE_DOWN",
     "place_from_nbt": []
   }
 }
