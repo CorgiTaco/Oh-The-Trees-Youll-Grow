@@ -14,7 +14,7 @@ plugins {
     id("idea")
     id("eclipse")
     id("net.minecraftforge.gradle") version "[7.0.17,8)"
-    id("com.hypherionmc.modutils.modpublisher") version "2.+"
+    id("com.hypherionmc.modutils.modpublisher") version "2.2.1"
 }
 
 val forge_version: String by project
