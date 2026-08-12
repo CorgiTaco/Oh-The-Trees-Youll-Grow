@@ -7,7 +7,7 @@ import com.hypherionmc.modpublisher.properties.ReleaseType
 plugins {
     id("multiloader-loader")
     id("net.neoforged.moddev")
-    id("com.hypherionmc.modutils.modpublisher") version "2.+"
+    id("com.hypherionmc.modutils.modpublisher") version "2.2.1"
 }
 
 val neoforge_version: String by project
