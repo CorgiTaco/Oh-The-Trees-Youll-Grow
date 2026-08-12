@@ -4,7 +4,7 @@ import com.hypherionmc.modpublisher.properties.ReleaseType
 
 plugins {
     id("com.github.johnrengelman.shadow")
-    id("com.hypherionmc.modutils.modpublisher") version "2.+"
+    id("com.hypherionmc.modutils.modpublisher") version "2.2.1"
 }
 
 architectury {
