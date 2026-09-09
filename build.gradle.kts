@@ -10,6 +10,7 @@ plugins {
 }
 
 val minecraftVersion = project.properties["minecraft_version"] as String
+val useParchment = (project.properties["use_parchment"] as String).toBoolean()
 architectury.minecraft = minecraftVersion
 
 allprojects {
@@ -30,7 +31,9 @@ subprojects {
     repositories {
         mavenCentral()
         mavenLocal()
-        maven("https://maven.parchmentmc.org")
+        if (useParchment) {
+            maven("https://maven.parchmentmc.org")
+        }
         maven("https://maven.fabricmc.net/")
         maven("https://maven.minecraftforge.net/")
         maven("https://maven.neoforged.net/releases/")
@@ -42,7 +45,9 @@ subprojects {
         "minecraft"("com.mojang:minecraft:$minecraftVersion")
         "mappings"(loom.layered{
             officialMojangMappings()
-            parchment("org.parchmentmc.data:parchment-$minecraftVersion:${project.properties["parchment"]}@zip")
+            if (useParchment) {
+                parchment("org.parchmentmc.data:parchment-$minecraftVersion:${project.properties["parchment"]}@zip")
+            }
         })
 
         compileOnly("org.jetbrains:annotations:26.1.0")
